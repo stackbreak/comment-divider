@@ -1,6 +1,6 @@
 {
-    "name": "comments-divider",
-    "displayName": "comments-divider",
+    "name": "comment-divider",
+    "displayName": "comment-divider",
     "description": "test test ets",
     "version": "0.0.1",
     "publisher": "stackbreak",
@@ -11,14 +11,14 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.sayHello"
+        "onCommand:extension.insertDivider"
     ],
     "main": "./out/extension",
     "contributes": {
         "commands": [
             {
-                "command": "extension.sayHello",
-                "title": "Hello World"
+                "command": "extension.insertDivider",
+                "title": "Insert Comment Divider"
             }
         ]
     },
