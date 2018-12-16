@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="Comment Divider" src="img/logo_256.png" width="20%"  />
+  <img alt="Comment Divider" src="https://github.com/stackbreak/comment-divider/raw/master/img/logo_256.png" width="20%"  />
 </p>
 
 <h1 align="center">
@@ -14,7 +14,7 @@ This is **[Visual Studio Code](https://github.com/Microsoft/vscode)** extension,
 
 - Default Shortcut:
 
-  <kbd>**shift**</kbd> + <kbd>**alt**</kbd> + <kbd>**x**</kbd>
+  **`Shift`** + **`Alt`** + **`X`**
 
 - Default Style:
 
@@ -26,13 +26,13 @@ This is **[Visual Studio Code](https://github.com/Microsoft/vscode)** extension,
 
 - Demo:
 
-  ![Main header Demo](img/002.gif)
+  ![Main header Demo](img/main-header.gif)
 
 ### Make subheader
 
 - Default Shortcut:
 
-  <kbd>**alt**</kbd> + <kbd>**x**</kbd>
+  **`Alt`** + **`X`**
 
 - Default Style:
 
@@ -42,13 +42,13 @@ This is **[Visual Studio Code](https://github.com/Microsoft/vscode)** extension,
 
 - Demo:
 
-  ![Subheader Demo](img/001.gif)
+  ![Subheader Demo](img/sub-header.gif)
 
 ### Insert solid line
 
 - Default Shortcut:
 
-  <kbd>**alt**</kbd> + <kbd>**y**</kbd>
+  **`Alt`** + **`Y`**
 
 * Default Style:
 
@@ -58,7 +58,7 @@ This is **[Visual Studio Code](https://github.com/Microsoft/vscode)** extension,
 
 * Demo:
 
-  ![Solid line Demo](img/003.gif)
+  ![Solid line Demo](img/solid-line.gif)
 
 ## Configuration
 
