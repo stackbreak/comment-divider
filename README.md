@@ -26,6 +26,8 @@ This is **[Visual Studio Code](https://github.com/Microsoft/vscode)** extension,
 
 - Demo:
 
+  ![Main header Demo](img/002.gif)
+
 ### Make subheader
 
 - Default Shortcut:
@@ -40,6 +42,8 @@ This is **[Visual Studio Code](https://github.com/Microsoft/vscode)** extension,
 
 - Demo:
 
+  ![Subheader Demo](img/001.gif)
+
 ### Insert solid line
 
 - Default Shortcut:
@@ -53,6 +57,8 @@ This is **[Visual Studio Code](https://github.com/Microsoft/vscode)** extension,
   ```
 
 * Demo:
+
+  ![Solid line Demo](img/003.gif)
 
 ## Configuration
 
