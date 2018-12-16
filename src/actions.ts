@@ -2,7 +2,7 @@
 /*                                   ACTIONS                                  */
 /* ========================================================================== */
 
-import { commands, TextEditor, TextEditorEdit, TextLine, Range, Position } from 'vscode';
+import { commands, TextEditor, TextEditorEdit, TextLine } from 'vscode';
 
 import { renderSubHeader, renderMainHeader, renderLine } from './renders';
 import { checkEmptyLine } from './errors';
@@ -61,7 +61,7 @@ export const insertSubHeader: Action = (editor, line, lang) => {
       textEditorEdit.replace(line.range, content);
     })
     .then(() => {
-      commands.executeCommand('cursorDown');
+      commands.executeCommand('cursorEnd');
     });
 };
 
@@ -75,15 +75,13 @@ export const insertMainHeader: Action = (editor, line, lang) => {
   const margins = computeMargins(line, editor);
   const content = wrapMargins(rendered, margins);
 
-  let thenable = editor.edit((textEditorEdit: TextEditorEdit) => {
-    textEditorEdit.replace(line.range, content);
-  });
-
-  for (let i = 0; i < 3; i++) {
-    thenable = thenable.then(() => {
-      return commands.executeCommand('cursorDown');
+  editor
+    .edit((textEditorEdit: TextEditorEdit) => {
+      textEditorEdit.replace(line.range, content);
+    })
+    .then(() => {
+      commands.executeCommand('cursorEnd');
     });
-  }
 };
 
 ///
