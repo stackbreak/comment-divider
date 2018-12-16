@@ -1,7 +1,15 @@
 # Change Log
-All notable changes to the "comments-divider" extension will be documented in this file.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+All notable changes to the "Comment Divider" extension will be documented in this file.
 
-## [Unreleased]
-- Initial release
+## [0.1.0] - 2018-12-16
+
+### Initial release
+
+- Support all standard languages.
+- Added Commands:
+  - `Make Main Header`
+  - `Make Subheader`
+  - `Insert Solid Line`
+- Added settings section.
+- Added hotkeys for commands.

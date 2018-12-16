@@ -1,39 +1,106 @@
 {
-    "name": "comment-divider",
-    "displayName": "comment-divider",
-    "description": "test test ets",
-    "version": "0.0.1",
-    "publisher": "stackbreak",
-    "engines": {
-        "vscode": "^1.28.0"
-    },
-    "categories": [
-        "Other"
+  "name": "comment-divider",
+  "displayName": "Comment Divider",
+  "description": "Divide your code by sections with styled separators.",
+  "version": "0.1.0",
+  "publisher": "stackbreak",
+  "license": "GPL-3.0",
+  "icon": "img/logo_256.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stackbreak/comment-divider"
+  },
+  "bugs": {
+    "url": "https://github.com/stackbreak/comment-divider/issues"
+  },
+  "engines": {
+    "vscode": "^1.28.0"
+  },
+  "categories": [
+    "Other",
+    "Snippets"
+  ],
+  "keywords": [
+    "comment",
+    "separator",
+    "divider",
+    "section"
+  ],
+  "activationEvents": [
+    "onCommand:comment-divider.makeSubHeader",
+    "onCommand:comment-divider.makeMainHeader",
+    "onCommand:comment-divider.insertSolidLine"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "comment-divider.makeSubHeader",
+        "title": "Comment Divider: Make Subheader"
+      },
+      {
+        "command": "comment-divider.makeMainHeader",
+        "title": "Comment Divider: Make Main Header"
+      },
+      {
+        "command": "comment-divider.insertSolidLine",
+        "title": "Comment Divider: Insert Solid Line"
+      }
     ],
-    "activationEvents": [
-        "onCommand:extension.insertDivider"
+    "keybindings": [
+      {
+        "command": "comment-divider.makeSubHeader",
+        "key": "alt+x",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "comment-divider.makeMainHeader",
+        "key": "shift+alt+x",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "comment-divider.insertSolidLine",
+        "key": "alt+y",
+        "when": "editorTextFocus"
+      }
     ],
-    "main": "./out/extension",
-    "contributes": {
-        "commands": [
-            {
-                "command": "extension.insertDivider",
-                "title": "Insert Comment Divider"
-            }
-        ]
-    },
-    "scripts": {
-        "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "npm run compile && node ./node_modules/vscode/bin/test"
-    },
-    "devDependencies": {
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.21",
-        "tslint": "^5.8.0",
-        "@types/node": "^8.10.25",
-        "@types/mocha": "^2.2.42"
+    "configuration": {
+      "title": "Comment Divider",
+      "properties": {
+        "comment-divider.length": {
+          "type": "number",
+          "default": 80,
+          "description": "Set line length for all dividers."
+        },
+        "comment-divider.subheader-filler": {
+          "type": "string",
+          "default": "-",
+          "description": "Set symbol for subheader line filling."
+        },
+        "comment-divider.mainheader-filler": {
+          "type": "string",
+          "default": "=",
+          "description": "Set symbol for main header line filling."
+        },
+        "comment-divider.line-filler": {
+          "type": "string",
+          "default": "-",
+          "description": "Set symbol for solid line filling."
+        }
+      }
     }
+  },
+  "main": "./out/extension",
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install"
+  },
+  "dependencies": {
+    "@types/node": "^10.12.15",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.17.0",
+    "typescript": "^3.2.2",
+    "vscode": "^1.1.26"
+  }
 }

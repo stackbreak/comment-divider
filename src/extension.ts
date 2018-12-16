@@ -1,16 +1,70 @@
-'use strict';
+/* ========================================================================== */
+/*                            EXTENSION MAIN SCRIPT                           */
+/* ========================================================================== */
 
-import * as vscode from 'vscode';
+import {
+  window,
+  commands,
+  ExtensionContext,
+  Selection,
+  TextDocument,
+  TextEditor,
+  TextLine
+} from 'vscode';
 
-export function activate(context: vscode.ExtensionContext) {
-    console.log('Congratulations, your extension "comment-divider" is now active!');
+import { EXT_ID } from './constants';
+import { handleError, checkMultiLineSelection } from './errors';
+import { Action, insertSubHeader, insertMainHeader, insertSolidLine } from './actions';
 
-    let disposable = vscode.commands.registerCommand('extension.insertDivider', () => {
-        vscode.window.showInformationMessage('Hello World!');
-    });
+/* --------------------------- Commands Generator --------------------------- */
 
-    context.subscriptions.push(disposable);
-}
+const getEditorState = (editor: TextEditor) => {
+  const selection: Selection = editor.selection;
 
-export function deactivate() {
+  checkMultiLineSelection(selection);
+
+  const document: TextDocument = editor.document;
+  const lang: string = document.languageId;
+  const line: TextLine = document.lineAt(selection.active.line);
+
+  return {
+    line,
+    lang
+  };
+};
+
+///
+
+const generateCommand = (action: Action) => () => {
+  try {
+    const editor: TextEditor = window.activeTextEditor;
+    if (!editor) return;
+
+    const { lang, line } = getEditorState(editor);
+    action(editor, line, lang);
+  } catch (e) {
+    handleError(e);
+  }
+};
+
+/* ---------------------------------- Main ---------------------------------- */
+
+export function activate(context: ExtensionContext) {
+  context.subscriptions.push(
+    commands.registerCommand(`${EXT_ID}.makeSubHeader`, generateCommand(insertSubHeader))
+  );
+
+  context.subscriptions.push(
+    commands.registerCommand(
+      `${EXT_ID}.makeMainHeader`,
+      generateCommand(insertMainHeader)
+    )
+  );
+
+  context.subscriptions.push(
+    commands.registerCommand(
+      `${EXT_ID}.insertSolidLine`,
+      generateCommand(insertSolidLine)
+    )
+  );
 }
