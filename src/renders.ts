@@ -1,113 +1,54 @@
-/* ========================================================================== */
+/* -------------------------------------------------------------------------- */
 /*                                LINE RENDERS                                */
-/* ========================================================================== */
+/* -------------------------------------------------------------------------- */
 
-import { getPreset, mergePresetWithLimiters, IConfig } from './config';
+import { TextEditor, TextLine } from 'vscode';
+
+import { IConfig, getConfig } from './config';
 import { GAP_SYM, NEW_LINE_SYM } from './constants';
-import { getLanguageLimiters } from './limiters';
 import { checkLongText, checkCommentChars } from './errors';
+import { buildLine } from './builders';
 
-///
+/* --------------------------------- Margins -------------------------------- */
 
-type CharList = string[];
-
-interface IWordsAnchors {
-  leftAnchor: number;
-  rightAnchor: number;
+interface IMargins {
+  top: boolean;
+  bottom: boolean;
 }
 
-/* --------------------------------- Helpers -------------------------------- */
+const isEmptyLine = (editor: TextEditor, lineNum: number) =>
+  editor.document.lineAt(lineNum).isEmptyOrWhitespace;
 
-const buildCharList = (lineLen: number, filler: string): CharList =>
-  Array(lineLen).fill(filler);
+const computeMargins = (line: TextLine, editor: TextEditor): IMargins => {
+  const lastLineNum = editor.document.lineCount - 1;
+  const prevLineNum = line.lineNumber - 1;
+  const nextLineNum = line.lineNumber + 1;
+  const margins = {
+    top: false,
+    bottom: false
+  };
 
-///
+  margins.top = prevLineNum >= 0 && !isEmptyLine(editor, prevLineNum);
+  margins.bottom = nextLineNum <= lastLineNum && !isEmptyLine(editor, nextLineNum);
 
-const charListToString = (charList: CharList) => charList.join('');
-
-///
-
-const isEven = (num: number) => num % 2 === 0;
-
-///
-
-const getWordsAnchors = (charList: CharList, words: string): IWordsAnchors => {
-  const smartRound =
-    !isEven(words.length) && !isEven(charList.length) ? Math.floor : Math.ceil;
-  const halfLen = smartRound(charList.length / 2);
-  const halfWord = Math.floor(words.length / 2);
-  const leftAnchor = halfLen - halfWord;
-  const rightAnchor = leftAnchor + (words.length - 1);
-
-  return { leftAnchor, rightAnchor };
-};
-
-/* -------------------------------- Injectors ------------------------------- */
-
-const withLimiters = (leftLim: string, rightLim: string) => (
-  charList: CharList
-): CharList => {
-  const rightLimAnchor = charList.length - rightLim.length;
-
-  return charList.map((char, i) => {
-    // Insert left limiter
-    if (i < leftLim.length) return leftLim[i];
-    // Insert right limiter
-    else if (i >= rightLimAnchor) return rightLim[i - rightLimAnchor];
-    // Insert gaps after/before non-empty limiters
-    else if (
-      (leftLim.length && i === leftLim.length) ||
-      (rightLim.length && i === rightLimAnchor - 1)
-    )
-      return GAP_SYM;
-    // Pass other chars
-    else return char;
-  });
+  return margins;
 };
 
 ///
 
-const withWords = (words: string) => (charList: CharList): CharList => {
-  const { leftAnchor, rightAnchor } = getWordsAnchors(charList, words);
+export const wrapMargins = (text: string, line: TextLine, editor: TextEditor): string => {
+  const margins = computeMargins(line, editor);
 
-  return charList.map((char, i) => {
-    // Insert words
-    if (i >= leftAnchor && i <= rightAnchor) return words[i - leftAnchor];
-    // Insert gaps before/after words
-    else if (i === leftAnchor - 1 || i === rightAnchor + 1) return GAP_SYM;
-    // Pass other chars
-    else return char;
-  });
-};
+  const before: string = margins.top ? NEW_LINE_SYM : '';
+  const after: string = margins.bottom ? NEW_LINE_SYM : '';
 
-///
-
-const passToNextInjector = (charList: CharList) => charList;
-
-///
-
-const composeInjectors = (...injectors) => (charList: CharList) =>
-  injectors.reduce((res: CharList, injector) => injector(res), charList);
-
-/* ------------------------------ Line Builders ----------------------------- */
-
-const buildLine = (config: IConfig, words?: string) => {
-  const injectLimiters = withLimiters(config.limiters.left, config.limiters.right);
-  const injectWords = words ? withWords(words) : passToNextInjector;
-
-  const blankCharList = buildCharList(config.lineLen, config.sym);
-  const computedCharList = composeInjectors(injectLimiters, injectWords)(blankCharList);
-
-  return charListToString(computedCharList);
+  return before + text + after;
 };
 
 /* --------------------------------- Renders -------------------------------- */
 
 export const renderSubHeader = (text: string, lang: string): string => {
-  const config = mergePresetWithLimiters(
-    getPreset('subheader'),
-    getLanguageLimiters(lang)
-  );
+  const config = getConfig('subheader', lang);
 
   checkCommentChars(text, config.limiters);
   checkLongText(text, config.lineLen, config.limiters);
@@ -118,15 +59,12 @@ export const renderSubHeader = (text: string, lang: string): string => {
 ///
 
 export const renderMainHeader = (text: string, lang: string): string => {
-  const config = mergePresetWithLimiters(
-    getPreset('mainheader'),
-    getLanguageLimiters(lang)
-  );
+  const config = getConfig('mainheader', lang);
 
   checkCommentChars(text, config.limiters);
   checkLongText(text, config.lineLen, config.limiters);
 
-  const textConfig = { ...config, sym: GAP_SYM };
+  const textConfig: IConfig = { ...config, sym: GAP_SYM };
   const topLine = buildLine(config);
   const textLine = buildLine(textConfig, text.toUpperCase());
   const bottomLine = buildLine(config);
@@ -137,7 +75,7 @@ export const renderMainHeader = (text: string, lang: string): string => {
 ///
 
 export const renderLine = (lang: string): string => {
-  const config = mergePresetWithLimiters(getPreset('line'), getLanguageLimiters(lang));
+  const config = getConfig('line', lang);
 
   return buildLine(config);
 };

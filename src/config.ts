@@ -1,11 +1,11 @@
-/* ========================================================================== */
-/*                                READ SETTINGS                               */
-/* ========================================================================== */
+/* -------------------------------------------------------------------------- */
+/*                                CONFIG READER                               */
+/* -------------------------------------------------------------------------- */
 
 import { workspace } from 'vscode';
 
-import { GAP_SYM, EXT_ID } from './constants';
-import { ILimiters } from './limiters';
+import { EXT_ID } from './constants';
+import { ILimiters, getLanguageLimiters } from './limiters';
 
 ///
 
@@ -25,7 +25,7 @@ export interface IConfig extends IPreset {
 
 /* ----------------------------- Config Builder ----------------------------- */
 
-export const getPreset = (type: PresetId): IPreset => {
+const getPreset = (type: PresetId): IPreset => {
   const section = workspace.getConfiguration(EXT_ID);
   const lineLen: number = section.get('length');
 
@@ -39,10 +39,10 @@ export const getPreset = (type: PresetId): IPreset => {
 
 ///
 
-export const mergePresetWithLimiters = (
-  preset: IPreset,
-  limiters: ILimiters
-): IConfig => ({
+const mergePresetWithLimiters = (preset: IPreset, limiters: ILimiters): IConfig => ({
   ...preset,
   limiters
 });
+
+export const getConfig = (presetId: PresetId, lang: string): IConfig =>
+  mergePresetWithLimiters(getPreset(presetId), getLanguageLimiters(lang));
