@@ -9,11 +9,14 @@ import { ILimiters } from './limiters';
 
 ///
 
-type PresetId = 'empty' | 'subheader' | 'mainheader' | 'line';
+type PresetId = 'subheader' | 'mainheader' | 'line';
 
 interface IPreset {
   lineLen: number;
   sym: string;
+  height: string;
+  align: string;
+  transform: string;
 }
 
 export interface IConfig extends IPreset {
@@ -25,9 +28,13 @@ export interface IConfig extends IPreset {
 export const getPreset = (type: PresetId): IPreset => {
   const section = workspace.getConfiguration(EXT_ID);
   const lineLen: number = section.get('length');
-  const sym: string = type === 'empty' ? GAP_SYM : section.get(`${type}-filler`);
 
-  return { lineLen, sym };
+  const sym: string = section.get(`${type}-filler`);
+  const height: string = section.get(`${type}-height`);
+  const align: string = section.get(`${type}-align`);
+  const transform: string = section.get(`${type}-transform`);
+
+  return { lineLen, sym, height, align, transform };
 };
 
 ///
