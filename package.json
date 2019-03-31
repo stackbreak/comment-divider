@@ -71,15 +71,45 @@
           "default": 80,
           "description": "Set line length for all dividers."
         },
+        "comment-divider.mainheader-filler": {
+          "type": "string",
+          "default": "=",
+          "description": "Set symbol for main header line filling."
+        },
+        "comment-divider.mainheader-height": {
+          "type": "string",
+          "default": "multiline",
+          "description": ":"
+        },
+        "comment-divider.mainheader-align": {
+          "type": "string",
+          "default": "center",
+          "description": ":"
+        },
+        "comment-divider.mainheader-transform": {
+          "type": "string",
+          "default": "uppercase",
+          "description": ":"
+        },
         "comment-divider.subheader-filler": {
           "type": "string",
           "default": "-",
           "description": "Set symbol for subheader line filling."
         },
-        "comment-divider.mainheader-filler": {
+        "comment-divider.subheader-height": {
           "type": "string",
-          "default": "=",
-          "description": "Set symbol for main header line filling."
+          "default": "singleline",
+          "description": ":"
+        },
+        "comment-divider.subheader-align": {
+          "type": "string",
+          "default": "center",
+          "description": ":"
+        },
+        "comment-divider.subheader-transform": {
+          "type": "string",
+          "default": "none",
+          "description": ":"
         },
         "comment-divider.line-filler": {
           "type": "string",
