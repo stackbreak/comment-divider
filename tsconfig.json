@@ -8,7 +8,8 @@
     "rootDir": "src",
     "strict": false,
     "removeComments": true,
-    "noUnusedLocals": false
+    "noUnusedLocals": false,
+    "plugins": [{ "name": "typescript-tslint-plugin" }]
   },
 
   "exclude": ["node_modules", ".vscode-test"]
