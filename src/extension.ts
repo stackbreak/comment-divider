@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/*                                    MAIN                                    */
+/*                                 ENTRY POINT                                */
 /* -------------------------------------------------------------------------- */
 
 import {
@@ -51,14 +51,14 @@ const generateCommand = (action: Action) => () => {
 
 export function activate(context: ExtensionContext) {
   context.subscriptions.push(
-    commands.registerCommand(`${EXT_ID}.makeSubHeader`, generateCommand(insertSubHeader))
-  );
-
-  context.subscriptions.push(
     commands.registerCommand(
       `${EXT_ID}.makeMainHeader`,
       generateCommand(insertMainHeader)
     )
+  );
+
+  context.subscriptions.push(
+    commands.registerCommand(`${EXT_ID}.makeSubHeader`, generateCommand(insertSubHeader))
   );
 
   context.subscriptions.push(

@@ -10,13 +10,18 @@ import { ILimiters } from './limiters';
 ///
 
 export const ERRORS = {
-  EMPTY_LINE: 'EmptyLine',
-  MULTI_LINE: 'MultiLine',
-  LONG_TEXT: 'LongText',
-  COMMENT_CHARS: 'CommentChars'
+  EMPTY_LINE: 'Line should contain at least one character!',
+  MULTI_LINE: 'Selection should be on single line!',
+  LONG_TEXT:
+    'Too many characters! Increase divider length in settings or use less characters.',
+  COMMENT_CHARS: 'Line contains comment characters!'
 };
 
+const ERRORS_LIST = (Object as any).values(ERRORS);
+
 /* --------------------------------- Helpers -------------------------------- */
+
+const isCustomError = (msg: string) => ERRORS_LIST.includes(msg);
 
 const showErrorMsg = (msg: string) =>
   window.showInformationMessage(`${EXT_NAME}: ${msg}`);
@@ -52,24 +57,6 @@ export const checkLongText = (text: string, lineLen: number, limiters: ILimiters
 
 /* --------------------------------- Handler -------------------------------- */
 
-export const handleError = (e: Error) => {
-  switch (e.message) {
-    case ERRORS.EMPTY_LINE:
-      showErrorMsg('Line should contain at least one character!');
-      break;
-
-    case ERRORS.MULTI_LINE:
-      showErrorMsg('Selection should be on single line!');
-      break;
-
-    case ERRORS.LONG_TEXT:
-      showErrorMsg(
-        'Too many characters! Increase divider length in settings or use less characters.'
-      );
-      break;
-
-    case ERRORS.COMMENT_CHARS:
-      showErrorMsg('Line contains comment characters!');
-      break;
-  }
+export const handleError = ({ message }: Error) => {
+  if (isCustomError(message)) showErrorMsg(message);
 };

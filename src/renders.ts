@@ -9,15 +9,17 @@ import { GAP_SYM, NEW_LINE_SYM } from './constants';
 import { checkLongText, checkCommentChars } from './errors';
 import { buildLine } from './builders';
 
+/* --------------------------------- Helpers -------------------------------- */
+
+const isEmptyLine = (lineNum: number) =>
+  window.activeTextEditor.document.lineAt(lineNum).isEmptyOrWhitespace;
+
 /* --------------------------------- Margins -------------------------------- */
 
 interface IMargins {
   top: boolean;
   bottom: boolean;
 }
-
-const isEmptyLine = (lineNum: number) =>
-  window.activeTextEditor.document.lineAt(lineNum).isEmptyOrWhitespace;
 
 const computeMargins = (line: TextLine): IMargins => {
   const lastLineNum = window.activeTextEditor.document.lineCount - 1;
@@ -36,7 +38,7 @@ const computeMargins = (line: TextLine): IMargins => {
 
 ///
 
-export const wrapMargins = (content: string, line: TextLine): string => {
+export const wrapWithMargins = (content: string, line: TextLine): string => {
   const margins = computeMargins(line);
 
   const before: string = margins.top ? NEW_LINE_SYM : '';
@@ -45,18 +47,9 @@ export const wrapMargins = (content: string, line: TextLine): string => {
   return before + content + after;
 };
 
+export const wrapWithLinebreaker = (content: string): string => content + NEW_LINE_SYM;
+
 /* --------------------------------- Renders -------------------------------- */
-
-export const renderSubHeader = (text: string, lang: string): string => {
-  const config = getConfig('subheader', lang);
-
-  checkCommentChars(text, config.limiters);
-  checkLongText(text, config.lineLen, config.limiters);
-
-  return buildLine(config, text);
-};
-
-///
 
 export const renderMainHeader = (text: string, lang: string): string => {
   const config = getConfig('mainheader', lang);
@@ -70,6 +63,17 @@ export const renderMainHeader = (text: string, lang: string): string => {
   const bottomLine = buildLine(config);
 
   return topLine + NEW_LINE_SYM + textLine + NEW_LINE_SYM + bottomLine;
+};
+
+///
+
+export const renderSubHeader = (text: string, lang: string): string => {
+  const config = getConfig('subheader', lang);
+
+  checkCommentChars(text, config.limiters);
+  checkLongText(text, config.lineLen, config.limiters);
+
+  return buildLine(config, text);
 };
 
 ///
