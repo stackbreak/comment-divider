@@ -2,7 +2,7 @@
 /*                                LINE RENDERS                                */
 /* -------------------------------------------------------------------------- */
 
-import { TextEditor, TextLine } from 'vscode';
+import { TextLine, window } from 'vscode';
 
 import { IConfig, getConfig } from './config';
 import { GAP_SYM, NEW_LINE_SYM } from './constants';
@@ -16,11 +16,11 @@ interface IMargins {
   bottom: boolean;
 }
 
-const isEmptyLine = (editor: TextEditor, lineNum: number) =>
-  editor.document.lineAt(lineNum).isEmptyOrWhitespace;
+const isEmptyLine = (lineNum: number) =>
+  window.activeTextEditor.document.lineAt(lineNum).isEmptyOrWhitespace;
 
-const computeMargins = (line: TextLine, editor: TextEditor): IMargins => {
-  const lastLineNum = editor.document.lineCount - 1;
+const computeMargins = (line: TextLine): IMargins => {
+  const lastLineNum = window.activeTextEditor.document.lineCount - 1;
   const prevLineNum = line.lineNumber - 1;
   const nextLineNum = line.lineNumber + 1;
   const margins = {
@@ -28,21 +28,21 @@ const computeMargins = (line: TextLine, editor: TextEditor): IMargins => {
     bottom: false
   };
 
-  margins.top = prevLineNum >= 0 && !isEmptyLine(editor, prevLineNum);
-  margins.bottom = nextLineNum <= lastLineNum && !isEmptyLine(editor, nextLineNum);
+  margins.top = prevLineNum >= 0 && !isEmptyLine(prevLineNum);
+  margins.bottom = nextLineNum <= lastLineNum && !isEmptyLine(nextLineNum);
 
   return margins;
 };
 
 ///
 
-export const wrapMargins = (text: string, line: TextLine, editor: TextEditor): string => {
-  const margins = computeMargins(line, editor);
+export const wrapMargins = (content: string, line: TextLine): string => {
+  const margins = computeMargins(line);
 
   const before: string = margins.top ? NEW_LINE_SYM : '';
   const after: string = margins.bottom ? NEW_LINE_SYM : '';
 
-  return before + text + after;
+  return before + content + after;
 };
 
 /* --------------------------------- Renders -------------------------------- */
