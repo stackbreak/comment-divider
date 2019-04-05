@@ -2,7 +2,6 @@ import { workspace } from 'vscode';
 
 import { EXT_ID } from './constants';
 import { getLanguageLimiters } from './limiters';
-import { buildLine, buildBlock } from './builders';
 import { IPreset, ILimiters, IConfig, PresetId, Height, Align, Transform } from './types';
 
 ///
@@ -30,10 +29,3 @@ const mergePresetWithLimiters = (preset: IPreset, limiters: ILimiters): IConfig 
 
 export const getConfig = (presetId: PresetId, lang: string): IConfig =>
   mergePresetWithLimiters(getPreset(presetId), getLanguageLimiters(lang));
-
-///
-
-export const BUILDERS_MAP: { [key in Height]: any } = {
-  block: buildBlock,
-  line: buildLine
-};

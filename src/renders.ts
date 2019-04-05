@@ -1,7 +1,7 @@
 import { TextLine, window } from 'vscode';
 
-import { BUILDERS_MAP, getConfig } from './config';
-import { NEW_LINE_SYM } from './constants';
+import { getConfig } from './config';
+import { NEW_LINE_SYM, BUILDERS_MAP } from './constants';
 import { checkLongText, checkCommentChars } from './errors';
 import { PresetId, IMargins } from './types';
 
@@ -55,17 +55,17 @@ export const renderHeader = (
   checkCommentChars(cutText, config.limiters);
   checkLongText(cutText, config.lineLen, config.limiters);
 
-  const builder = BUILDERS_MAP[config.height];
+  const build = BUILDERS_MAP[config.height];
   const transformedWords = cutText; // mock
 
-  return builder(config, transformedWords);
+  return build(config, transformedWords);
 };
 
 ///
 
 export const renderLine = (lang: string): string => {
   const config = getConfig('line', lang);
-  const builder = BUILDERS_MAP.line;
+  const build = BUILDERS_MAP.line;
 
-  return builder(config);
+  return build(config);
 };

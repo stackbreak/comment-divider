@@ -1,9 +1,9 @@
-import { GAP_SYM, NEW_LINE_SYM } from './constants';
+import { GAP_SYM, NEW_LINE_SYM, WORDS_INJECTORS_MAP } from './constants';
 import { IWordsAnchors, IConfig, CharList } from './types';
 
 /* --------------------------------- Helpers -------------------------------- */
 
-const buildCharList = (lineLen: number, filler: string): CharList =>
+const buildBlankCharList = (lineLen: number, filler: string): CharList =>
   Array(lineLen).fill(filler);
 
 ///
@@ -29,7 +29,7 @@ const getWordsAnchors = (charList: CharList, words: string): IWordsAnchors => {
 
 /* -------------------------------- Injectors ------------------------------- */
 
-const withLimiters = (leftLim: string, rightLim: string) => (
+export const withLimiters = (leftLim: string, rightLim: string) => (
   charList: CharList
 ): CharList => {
   const rightLimAnchor = charList.length - rightLim.length;
@@ -52,7 +52,7 @@ const withLimiters = (leftLim: string, rightLim: string) => (
 
 ///
 
-const withWords = (words: string) => (charList: CharList): CharList => {
+export const withCenterWords = (words: string) => (charList: CharList): CharList => {
   const { leftAnchor, rightAnchor } = getWordsAnchors(charList, words);
 
   return charList.map((char, i) => {
@@ -63,6 +63,16 @@ const withWords = (words: string) => (charList: CharList): CharList => {
     // Pass other chars
     else return char;
   });
+};
+
+export const withLeftWords = (words: string) => (charList: CharList): CharList => {
+  return charList.map((i) => i); // mock
+};
+
+///
+
+export const withRightWords = (words: string) => (charList: CharList): CharList => {
+  return charList.map((i) => i); // mock
 };
 
 ///
@@ -78,10 +88,11 @@ const composeInjectors = (...injectors) => (charList: CharList) =>
 
 export const buildLine = (config: IConfig, transformedWords?: string): string => {
   const injectLimiters = withLimiters(config.limiters.left, config.limiters.right);
-  // const injectWords = transformedWords ? withWords(transformedWords) : passToNextInjector;
-  const injectWords = passToNextInjector;
+  const injectWords = transformedWords
+    ? WORDS_INJECTORS_MAP[config.align](transformedWords)
+    : passToNextInjector;
 
-  const blankCharList = buildCharList(config.lineLen, config.sym);
+  const blankCharList = buildBlankCharList(config.lineLen, config.sym);
   const computedCharList = composeInjectors(injectLimiters, injectWords)(blankCharList);
 
   return charListToString(computedCharList);
