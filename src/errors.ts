@@ -1,11 +1,7 @@
-/* -------------------------------------------------------------------------- */
-/*                                   ERRORS                                   */
-/* -------------------------------------------------------------------------- */
-
 import { window, Selection, TextLine } from 'vscode';
 
 import { EXT_NAME } from './constants';
-import { ILimiters } from './limiters';
+import { ILimiters } from './types';
 
 ///
 
@@ -17,11 +13,7 @@ export const ERRORS = {
   COMMENT_CHARS: 'Line contains comment characters!'
 };
 
-const ERRORS_LIST = (Object as any).values(ERRORS);
-
 /* --------------------------------- Helpers -------------------------------- */
-
-const isCustomError = (msg: string) => ERRORS_LIST.includes(msg);
 
 const showErrorMsg = (msg: string) =>
   window.showInformationMessage(`${EXT_NAME}: ${msg}`);
@@ -29,20 +21,20 @@ const showErrorMsg = (msg: string) =>
 /* -------------------------------- Checkers -------------------------------- */
 
 export const checkMultiLineSelection = (selection: Selection) => {
-  if (!selection.isSingleLine) throw new Error(ERRORS.MULTI_LINE);
+  if (!selection.isSingleLine) throw new Error('MULTI_LINE');
 };
 
 ///
 
 export const checkEmptyLine = (line: TextLine) => {
-  if (line.isEmptyOrWhitespace) throw new Error(ERRORS.EMPTY_LINE);
+  if (line.isEmptyOrWhitespace) throw new Error('EMPTY_LINE');
 };
 
 ///
 
 export const checkCommentChars = (text: string, limiters: ILimiters) => {
   if (text.includes(limiters.left) || text.includes(limiters.right))
-    throw new Error(ERRORS.COMMENT_CHARS);
+    throw new Error('COMMENT_CHARS');
 };
 
 ///
@@ -52,11 +44,12 @@ export const checkLongText = (text: string, lineLen: number, limiters: ILimiters
   const gapsCount = 4;
   const minFillerCount = 2;
   const maxAllowedLen = lineLen - (limitersLen + gapsCount + minFillerCount);
-  if (text.length > maxAllowedLen) throw new Error(ERRORS.LONG_TEXT);
+  if (text.length > maxAllowedLen) throw new Error('LONG_TEXT');
 };
 
 /* --------------------------------- Handler -------------------------------- */
 
-export const handleError = ({ message }: Error) => {
-  if (isCustomError(message)) showErrorMsg(message);
+export const handleError = (e: Error) => {
+  const errorMsg = ERRORS[e.message];
+  if (errorMsg !== undefined) showErrorMsg(errorMsg);
 };

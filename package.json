@@ -2,7 +2,7 @@
   "name": "comment-divider",
   "displayName": "Comment Divider",
   "description": "Divide your code by sections with styled separators.",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "publisher": "stackbreak",
   "license": "GPL-3.0",
   "icon": "img/logo_256.png",
@@ -64,6 +64,7 @@
       }
     ],
     "configuration": {
+      "type": "object",
       "title": "Comment Divider",
       "properties": {
         "comment-divider.length": {
@@ -71,47 +72,77 @@
           "default": 80,
           "description": "Set line length for all dividers."
         },
-        "comment-divider.mainheader-filler": {
+        "comment-divider.mainheaderFiller": {
           "type": "string",
-          "default": "=",
+          "default": "-",
           "description": "Set symbol for main header line filling."
         },
-        "comment-divider.mainheader-height": {
+        "comment-divider.mainheaderHeight": {
           "type": "string",
-          "default": "multiline",
+          "enum": [
+            "block",
+            "line"
+          ],
+          "default": "block",
           "description": ":"
         },
-        "comment-divider.mainheader-align": {
+        "comment-divider.mainheaderAlign": {
           "type": "string",
+          "enum": [
+            "center",
+            "left",
+            "right"
+          ],
           "default": "center",
           "description": ":"
         },
-        "comment-divider.mainheader-transform": {
+        "comment-divider.mainheaderTransform": {
           "type": "string",
+          "enum": [
+            "uppercase",
+            "lowercase",
+            "titlecase",
+            "none"
+          ],
           "default": "uppercase",
           "description": ":"
         },
-        "comment-divider.subheader-filler": {
+        "comment-divider.subheaderFiller": {
           "type": "string",
           "default": "-",
           "description": "Set symbol for subheader line filling."
         },
-        "comment-divider.subheader-height": {
+        "comment-divider.subheaderHeight": {
           "type": "string",
-          "default": "singleline",
+          "enum": [
+            "block",
+            "line"
+          ],
+          "default": "line",
           "description": ":"
         },
-        "comment-divider.subheader-align": {
+        "comment-divider.subheaderAlign": {
           "type": "string",
+          "enum": [
+            "center",
+            "left",
+            "right"
+          ],
           "default": "center",
           "description": ":"
         },
-        "comment-divider.subheader-transform": {
+        "comment-divider.subheaderTransform": {
           "type": "string",
+          "enum": [
+            "uppercase",
+            "lowercase",
+            "titlecase",
+            "none"
+          ],
           "default": "none",
           "description": ":"
         },
-        "comment-divider.line-filler": {
+        "comment-divider.lineFiller": {
           "type": "string",
           "default": "-",
           "description": "Set symbol for solid line filling."

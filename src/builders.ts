@@ -1,16 +1,5 @@
-/* -------------------------------------------------------------------------- */
-/*                                LINE BUILDERS                               */
-/* -------------------------------------------------------------------------- */
-
-import { IConfig } from './config';
 import { GAP_SYM, NEW_LINE_SYM } from './constants';
-
-type CharList = string[];
-
-interface IWordsAnchors {
-  leftAnchor: number;
-  rightAnchor: number;
-}
+import { IWordsAnchors, IConfig, CharList } from './types';
 
 /* --------------------------------- Helpers -------------------------------- */
 
@@ -87,12 +76,24 @@ const composeInjectors = (...injectors) => (charList: CharList) =>
 
 /* ------------------------------ Line Builders ----------------------------- */
 
-export const buildLine = (config: IConfig, words?: string) => {
+export const buildLine = (config: IConfig, transformedWords?: string): string => {
   const injectLimiters = withLimiters(config.limiters.left, config.limiters.right);
-  const injectWords = words ? withWords(words) : passToNextInjector;
+  // const injectWords = transformedWords ? withWords(transformedWords) : passToNextInjector;
+  const injectWords = passToNextInjector;
 
   const blankCharList = buildCharList(config.lineLen, config.sym);
   const computedCharList = composeInjectors(injectLimiters, injectWords)(blankCharList);
 
   return charListToString(computedCharList);
+};
+
+/* ----------------------------- Block Builders ----------------------------- */
+
+export const buildBlock = (config: IConfig, transformedWords: string): string => {
+  const textConfig: IConfig = { ...config, sym: GAP_SYM };
+  const topLine = buildLine(config);
+  const textLine = buildLine(textConfig, transformedWords);
+  const bottomLine = buildLine(config);
+
+  return topLine + NEW_LINE_SYM + textLine + NEW_LINE_SYM + bottomLine;
 };

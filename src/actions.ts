@@ -1,27 +1,20 @@
-/* -------------------------------------------------------------------------- */
-/*                                   ACTIONS                                  */
-/* -------------------------------------------------------------------------- */
-
 import { commands, TextEditorEdit, TextLine, window } from 'vscode';
 
 import {
-  renderSubHeader,
-  renderMainHeader,
+  renderHeader,
   renderLine,
   wrapWithMargins,
   wrapWithLinebreaker
 } from './renders';
 import { checkEmptyLine } from './errors';
-
-export type Action = (line: TextLine, lang: string) => void;
+import { Action } from './types';
 
 /* --------------------------------- Inserts -------------------------------- */
 
 export const insertMainHeader: Action = (line, lang) => {
   checkEmptyLine(line);
 
-  const currentText = line.text.trim();
-  const rendered = renderMainHeader(currentText, lang);
+  const rendered = renderHeader('mainheader', line.text, lang);
   const content = wrapWithMargins(rendered, line);
 
   window.activeTextEditor
@@ -38,8 +31,7 @@ export const insertMainHeader: Action = (line, lang) => {
 export const insertSubHeader: Action = (line, lang) => {
   checkEmptyLine(line);
 
-  const currentText = line.text.trim();
-  const rendered = renderSubHeader(currentText, lang);
+  const rendered = renderHeader('subheader', line.text, lang);
   const content = wrapWithMargins(rendered, line);
 
   window.activeTextEditor

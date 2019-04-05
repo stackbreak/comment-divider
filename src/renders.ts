@@ -1,13 +1,9 @@
-/* -------------------------------------------------------------------------- */
-/*                                LINE RENDERS                                */
-/* -------------------------------------------------------------------------- */
-
 import { TextLine, window } from 'vscode';
 
-import { IConfig, getConfig } from './config';
-import { GAP_SYM, NEW_LINE_SYM } from './constants';
+import { BUILDERS_MAP, getConfig } from './config';
+import { NEW_LINE_SYM } from './constants';
 import { checkLongText, checkCommentChars } from './errors';
-import { buildLine } from './builders';
+import { PresetId, IMargins } from './types';
 
 /* --------------------------------- Helpers -------------------------------- */
 
@@ -15,11 +11,6 @@ const isEmptyLine = (lineNum: number) =>
   window.activeTextEditor.document.lineAt(lineNum).isEmptyOrWhitespace;
 
 /* --------------------------------- Margins -------------------------------- */
-
-interface IMargins {
-  top: boolean;
-  bottom: boolean;
-}
 
 const computeMargins = (line: TextLine): IMargins => {
   const lastLineNum = window.activeTextEditor.document.lineCount - 1;
@@ -47,39 +38,34 @@ export const wrapWithMargins = (content: string, line: TextLine): string => {
   return before + content + after;
 };
 
+///
+
 export const wrapWithLinebreaker = (content: string): string => content + NEW_LINE_SYM;
 
 /* --------------------------------- Renders -------------------------------- */
 
-export const renderMainHeader = (text: string, lang: string): string => {
-  const config = getConfig('mainheader', lang);
+export const renderHeader = (
+  type: Exclude<PresetId, 'line'>,
+  rawText: string,
+  lang: string
+): string => {
+  const config = getConfig(type, lang);
+  const cutText = rawText.trim();
 
-  checkCommentChars(text, config.limiters);
-  checkLongText(text, config.lineLen, config.limiters);
+  checkCommentChars(cutText, config.limiters);
+  checkLongText(cutText, config.lineLen, config.limiters);
 
-  const textConfig: IConfig = { ...config, sym: GAP_SYM };
-  const topLine = buildLine(config);
-  const textLine = buildLine(textConfig, text.toUpperCase());
-  const bottomLine = buildLine(config);
+  const builder = BUILDERS_MAP[config.height];
+  const transformedWords = cutText; // mock
 
-  return topLine + NEW_LINE_SYM + textLine + NEW_LINE_SYM + bottomLine;
-};
-
-///
-
-export const renderSubHeader = (text: string, lang: string): string => {
-  const config = getConfig('subheader', lang);
-
-  checkCommentChars(text, config.limiters);
-  checkLongText(text, config.lineLen, config.limiters);
-
-  return buildLine(config, text);
+  return builder(config, transformedWords);
 };
 
 ///
 
 export const renderLine = (lang: string): string => {
   const config = getConfig('line', lang);
+  const builder = BUILDERS_MAP.line;
 
-  return buildLine(config);
+  return builder(config);
 };
