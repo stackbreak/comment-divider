@@ -3,6 +3,7 @@ import { TextLine, window } from 'vscode';
 import { getConfig } from './config';
 import { NEW_LINE_SYM, BUILDERS_MAP } from './constants';
 import { checkLongText, checkCommentChars } from './errors';
+import { buildSolidLine } from './builders';
 import { PresetId, IMargins } from './types';
 
 /* --------------------------------- Helpers -------------------------------- */
@@ -65,7 +66,7 @@ export const renderHeader = (
 
 export const renderLine = (lang: string): string => {
   const config = getConfig('line', lang);
-  const build = BUILDERS_MAP.line;
+  const build = buildSolidLine;
 
   return build(config);
 };

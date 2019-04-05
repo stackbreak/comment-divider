@@ -4,7 +4,7 @@ import {
   withLeftWords,
   withRightWords,
   buildBlock,
-  buildLine
+  buildWordsLine
 } from './builders';
 
 /* --------------------------------- Common --------------------------------- */
@@ -27,5 +27,5 @@ export const WORDS_INJECTORS_MAP: { [key in Align]: any } = {
 
 export const BUILDERS_MAP: { [key in Height]: any } = {
   block: buildBlock,
-  line: buildLine
+  line: buildWordsLine
 };
