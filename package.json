@@ -128,7 +128,7 @@
             "left",
             "right"
           ],
-          "default": "center",
+          "default": "right",
           "description": ":"
         },
         "comment-divider.subheaderTransform": {

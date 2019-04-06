@@ -1,5 +1,5 @@
-import { GAP_SYM, NEW_LINE_SYM, WORDS_INJECTORS_MAP } from './constants';
-import { IWordsAnchors, IConfig, CharList } from './types';
+import { GAP_SYM, NEW_LINE_SYM } from './constants';
+import { IWordsAnchors, IConfig, CharList, Align } from './types';
 
 /* --------------------------------- Helpers -------------------------------- */
 
@@ -14,9 +14,9 @@ const charListToString = (charList: CharList) => charList.join('');
 
 const isEven = (num: number) => num % 2 === 0;
 
-///
+/* --------------------------------- Anchors -------------------------------- */
 
-const getWordsAnchors = (charList: CharList, words: string): IWordsAnchors => {
+const getCenterAlignedAnchors = (words: string, charList: CharList): IWordsAnchors => {
   const smartRound =
     !isEven(words.length) && !isEven(charList.length) ? Math.floor : Math.ceil;
   const halfLen = smartRound(charList.length / 2);
@@ -25,6 +25,61 @@ const getWordsAnchors = (charList: CharList, words: string): IWordsAnchors => {
   const rightAnchor = leftAnchor + (words.length - 1);
 
   return { leftAnchor, rightAnchor };
+};
+
+///
+
+const getLeftAlignedAnchors = (words: string, charList: CharList): IWordsAnchors => {
+  let leftAnchor: number;
+  let rightAnchor: number;
+
+  for (const idx of Object.keys(charList)) {
+    if (charList[idx] === GAP_SYM) {
+      leftAnchor = Number(idx) + 1;
+      break;
+    }
+  }
+
+  rightAnchor = leftAnchor + (words.length - 1);
+
+  return { leftAnchor, rightAnchor };
+};
+
+///
+
+const getRightAlignedAnchors = (words: string, charList: CharList): IWordsAnchors => {
+  let leftAnchor: number;
+  let rightAnchor: number;
+
+  const last = charList.length - 1;
+
+  for (const idx of Object.keys(charList)) {
+    if (charList[last - Number(idx)] === GAP_SYM) {
+      rightAnchor = last - (Number(idx) + 1);
+      break;
+    }
+  }
+
+  leftAnchor = rightAnchor - (words.length - 1);
+
+  return { leftAnchor, rightAnchor };
+};
+
+///
+
+const getWordsAnchors = (
+  align: Align,
+  words: string,
+  charList: CharList
+): IWordsAnchors => {
+  switch (align) {
+    case 'center':
+      return getCenterAlignedAnchors(words, charList);
+    case 'left':
+      return getLeftAlignedAnchors(words, charList);
+    case 'right':
+      return getRightAlignedAnchors(words, charList);
+  }
 };
 
 /* -------------------------------- Injectors ------------------------------- */
@@ -52,8 +107,10 @@ export const withLimiters = (leftLim: string, rightLim: string) => (
 
 ///
 
-export const withCenterWords = (words: string) => (charList: CharList): CharList => {
-  const { leftAnchor, rightAnchor } = getWordsAnchors(charList, words);
+export const withWords = (align: Align, words: string) => (
+  charList: CharList
+): CharList => {
+  const { leftAnchor, rightAnchor } = getWordsAnchors(align, words, charList);
 
   return charList.map((char, i) => {
     // Insert words
@@ -64,20 +121,6 @@ export const withCenterWords = (words: string) => (charList: CharList): CharList
     else return char;
   });
 };
-
-export const withLeftWords = (words: string) => (charList: CharList): CharList => {
-  return charList.map((i) => i); // mock
-};
-
-///
-
-export const withRightWords = (words: string) => (charList: CharList): CharList => {
-  return charList.map((i) => i); // mock
-};
-
-///
-
-const passToNextInjector = (charList: CharList) => charList;
 
 ///
 
@@ -99,7 +142,7 @@ export const buildSolidLine = (config: IConfig): string => {
 
 export const buildWordsLine = (config: IConfig, transformedWords: string): string => {
   const injectLimiters = withLimiters(config.limiters.left, config.limiters.right);
-  const injectWords = WORDS_INJECTORS_MAP[config.align](transformedWords);
+  const injectWords = withWords(config.align, transformedWords);
 
   const blankCharList = buildBlankCharList(config.lineLen, config.sym);
   const computedCharList = composeInjectors(injectLimiters, injectWords)(blankCharList);
