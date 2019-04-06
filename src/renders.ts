@@ -3,7 +3,8 @@ import { TextLine, window } from 'vscode';
 import { getConfig } from './config';
 import { NEW_LINE_SYM } from './constants';
 import { checkLongText, checkCommentChars } from './errors';
-import { buildSolidLine, BUILDERS_MAP } from './builders';
+import { BUILDERS_MAP, buildSolidLine } from './builders';
+import { TRANSFORM_MAP } from './transforms';
 import { PresetId, IMargins } from './types';
 
 /* --------------------------------- Helpers -------------------------------- */
@@ -51,13 +52,13 @@ export const renderHeader = (
   lang: string
 ): string => {
   const config = getConfig(type, lang);
-  const cutText = rawText.trim();
+  const croppedText = rawText.trim();
 
-  checkCommentChars(cutText, config.limiters);
-  checkLongText(cutText, config.lineLen, config.limiters);
+  checkCommentChars(croppedText, config.limiters);
+  checkLongText(croppedText, config.lineLen, config.limiters);
 
+  const transformedWords = TRANSFORM_MAP[config.transform](croppedText);
   const build = BUILDERS_MAP[config.height];
-  const transformedWords = cutText; // mock
 
   return build(config, transformedWords);
 };

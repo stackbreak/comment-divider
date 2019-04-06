@@ -128,7 +128,7 @@
             "left",
             "right"
           ],
-          "default": "right",
+          "default": "center",
           "description": ":"
         },
         "comment-divider.subheaderTransform": {
@@ -139,7 +139,7 @@
             "titlecase",
             "none"
           ],
-          "default": "none",
+          "default": "titlecase",
           "description": ":"
         },
         "comment-divider.lineFiller": {
