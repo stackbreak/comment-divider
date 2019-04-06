@@ -1,9 +1,9 @@
 import { TextLine, window } from 'vscode';
 
 import { getConfig } from './config';
-import { NEW_LINE_SYM, BUILDERS_MAP } from './constants';
+import { NEW_LINE_SYM } from './constants';
 import { checkLongText, checkCommentChars } from './errors';
-import { buildSolidLine } from './builders';
+import { buildSolidLine, BUILDERS_MAP } from './builders';
 import { PresetId, IMargins } from './types';
 
 /* --------------------------------- Helpers -------------------------------- */

@@ -1,5 +1,5 @@
 import { GAP_SYM, NEW_LINE_SYM } from './constants';
-import { IWordsAnchors, IConfig, CharList, Align } from './types';
+import { IWordsAnchors, IConfig, CharList, Align, Height } from './types';
 
 /* --------------------------------- Helpers -------------------------------- */
 
@@ -159,4 +159,11 @@ export const buildBlock = (config: IConfig, transformedWords: string): string =>
   const bottomLine = buildSolidLine(config);
 
   return topLine + NEW_LINE_SYM + textLine + NEW_LINE_SYM + bottomLine;
+};
+
+/* ------------------------------ Builders Map ------------------------------ */
+
+export const BUILDERS_MAP: { [key in Height]: any } = {
+  block: buildBlock,
+  line: buildWordsLine
 };
