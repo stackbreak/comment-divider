@@ -2,7 +2,7 @@
   "name": "comment-divider",
   "displayName": "Comment Divider",
   "description": "Divide your code by sections with styled separators.",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "publisher": "stackbreak",
   "license": "GPL-3.0",
   "icon": "img/logo_256.png",
@@ -64,6 +64,7 @@
       }
     ],
     "configuration": {
+      "type": "object",
       "title": "Comment Divider",
       "properties": {
         "comment-divider.length": {
@@ -71,18 +72,84 @@
           "default": 80,
           "description": "Set line length for all dividers."
         },
-        "comment-divider.subheader-filler": {
+        "comment-divider.mainHeaderFiller": {
           "type": "string",
+          "minLength": 1,
+          "maxLength": 1,
           "default": "-",
-          "description": "Set symbol for subheader line filling."
+          "description": "Set symbol for main header line filling (only one)."
         },
-        "comment-divider.mainheader-filler": {
+        "comment-divider.mainHeaderHeight": {
           "type": "string",
-          "default": "=",
-          "description": "Set symbol for main header line filling."
+          "enum": [
+            "block",
+            "line"
+          ],
+          "default": "block",
+          "description": "Set main header vertical style."
         },
-        "comment-divider.line-filler": {
+        "comment-divider.mainHeaderAlign": {
           "type": "string",
+          "enum": [
+            "center",
+            "left",
+            "right"
+          ],
+          "default": "center",
+          "description": "Set main header text align."
+        },
+        "comment-divider.mainHeaderTransform": {
+          "type": "string",
+          "enum": [
+            "uppercase",
+            "lowercase",
+            "titlecase",
+            "none"
+          ],
+          "default": "none",
+          "description": "Set main header text transform style."
+        },
+        "comment-divider.subheaderFiller": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1,
+          "default": "-",
+          "description": "Set symbol for subheader line filling (only one)."
+        },
+        "comment-divider.subheaderHeight": {
+          "type": "string",
+          "enum": [
+            "block",
+            "line"
+          ],
+          "default": "line",
+          "description": "Set subheader vertical style."
+        },
+        "comment-divider.subheaderAlign": {
+          "type": "string",
+          "enum": [
+            "center",
+            "left",
+            "right"
+          ],
+          "default": "center",
+          "description": "Set subheader text align."
+        },
+        "comment-divider.subheaderTransform": {
+          "type": "string",
+          "enum": [
+            "uppercase",
+            "lowercase",
+            "titlecase",
+            "none"
+          ],
+          "default": "none",
+          "description": "Set subheader text transform style."
+        },
+        "comment-divider.lineFiller": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1,
           "default": "-",
           "description": "Set symbol for solid line filling."
         }
@@ -96,11 +163,11 @@
     "watch": "tsc -watch -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install"
   },
-  "dependencies": {
-    "@types/node": "^10.12.15",
+  "devDependencies": {
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.17.0",
     "typescript": "^3.2.2",
+    "typescript-tslint-plugin": "^0.3.1",
     "vscode": "^1.1.26"
   }
 }

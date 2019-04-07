@@ -8,6 +8,16 @@
 
 This is **[Visual Studio Code](https://github.com/Microsoft/vscode)** extension, which provides commands for generating comment-wrapped separators from line content.
 
+**[Supports all common languages](#language-support).**
+
+## Install
+
+https://marketplace.visualstudio.com/items?itemName=stackbreak.comment-divider
+
+## Demo
+
+![Subheader Demo](img/sub-header.gif)
+
 ## Commands
 
 ### Make main header
@@ -19,14 +29,10 @@ This is **[Visual Studio Code](https://github.com/Microsoft/vscode)** extension,
 - Default Style:
 
   ```
-  /* ========================================================================== */
-  /*                                EXAMPLE TEXT                                */
-  /* ========================================================================== */
+  /* -------------------------------------------------------------------------- */
+  /*                                Example text                                */
+  /* -------------------------------------------------------------------------- */
   ```
-
-- Demo:
-
-  ![Main header Demo](img/main-header.gif)
 
 ### Make subheader
 
@@ -40,10 +46,6 @@ This is **[Visual Studio Code](https://github.com/Microsoft/vscode)** extension,
   /* ------------------------------ Example text ------------------------------ */
   ```
 
-- Demo:
-
-  ![Subheader Demo](img/sub-header.gif)
-
 ### Insert solid line
 
 - Default Shortcut:
@@ -56,24 +58,68 @@ This is **[Visual Studio Code](https://github.com/Microsoft/vscode)** extension,
   /* -------------------------------------------------------------------------- */
   ```
 
-* Demo:
+## Language Support
 
-  ![Solid line Demo](img/solid-line.gif)
+Extension uses relevant comment characters for all common languages.
 
-## Configuration
+For example, in python files subheader looks like
+
+```python
+# ------------------------------ python example ------------------------------ #
+```
+
+or in html files
+
+```html
+<!-- ---------------------------- html example ----------------------------- -->
+```
+
+## Default Configuration
+
+### Common
 
 ```json
   // Set line length for all dividers.
   "comment-divider.length": 80,
+```
 
+### Main Header
+
+```json
+  // "Set symbol for main header line filling (only one).
+  "comment-divider.mainHeaderFiller": "-",
+
+  // Set main header vertical style.
+  "comment-divider.mainHeaderHeight": "block",
+
+  // Set main header text align.
+  "comment-divider.mainHeaderAlign": "center",
+
+  // Set main header text transform style.
+  "comment-divider.mainHeaderTransform": "none",
+```
+
+### Subheader
+
+```json
+  // "Set symbol for subheader line filling (only one).
+  "comment-divider.subHeaderFiller": "-",
+
+  // Set subheader vertical style.
+  "comment-divider.subHeaderHeight": "line",
+
+  // Set subheader text align.
+  "comment-divider.subHeaderAlign": "center",
+
+  // Set subheader text transform style.
+  "comment-divider.subHeaderTransform": "none",
+```
+
+### Solid Line
+
+```json
   // Set symbol for solid line filling.
   "comment-divider.line-filler": "-",
-
-  // Set symbol for main header line filling.
-  "comment-divider.mainheader-filler": "=",
-
-  // Set symbol for subheader line filling.
-  "comment-divider.subheader-filler": "-"
 ```
 
 ## Issues

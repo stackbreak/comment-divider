@@ -2,6 +2,20 @@
 
 All notable changes to the "Comment Divider" extension will be documented in this file.
 
+## [0.2.0] - 2019-04-07
+
+### Fixed
+
+- Restrict filler length.
+- Refactor some logic.
+- Remove unused `node_modules`.
+
+### Features
+
+- New settings for both header types.
+- Text transform options.
+- Text align options.
+
 ## [0.1.1] - 2018-12-17
 
 ### Fixed

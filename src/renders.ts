@@ -1,143 +1,75 @@
-/* ========================================================================== */
-/*                                LINE RENDERS                                */
-/* ========================================================================== */
+import { TextLine, window } from 'vscode';
 
-import { getPreset, mergePresetWithLimiters, IConfig } from './config';
-import { GAP_SYM, NEW_LINE_SYM } from './constants';
-import { getLanguageLimiters } from './limiters';
-import { checkLongText, checkCommentChars } from './errors';
-
-///
-
-type CharList = string[];
-
-interface IWordsAnchors {
-  leftAnchor: number;
-  rightAnchor: number;
-}
+import { getConfig } from './config';
+import { NEW_LINE_SYM } from './constants';
+import { checkLongText, checkCommentChars, checkFillerLen } from './errors';
+import { BUILDERS_MAP, buildSolidLine } from './builders';
+import { TRANSFORM_MAP } from './transforms';
+import { PresetId, IMargins } from './types';
 
 /* --------------------------------- Helpers -------------------------------- */
 
-const buildCharList = (lineLen: number, filler: string): CharList =>
-  Array(lineLen).fill(filler);
+const isEmptyLine = (lineNum: number) =>
+  window.activeTextEditor.document.lineAt(lineNum).isEmptyOrWhitespace;
 
-///
+/* --------------------------------- Margins -------------------------------- */
 
-const charListToString = (charList: CharList) => charList.join('');
+const computeMargins = (line: TextLine): IMargins => {
+  const lastLineNum = window.activeTextEditor.document.lineCount - 1;
+  const prevLineNum = line.lineNumber - 1;
+  const nextLineNum = line.lineNumber + 1;
+  const margins = {
+    top: false,
+    bottom: false
+  };
 
-///
+  margins.top = prevLineNum >= 0 && !isEmptyLine(prevLineNum);
+  margins.bottom = nextLineNum <= lastLineNum && !isEmptyLine(nextLineNum);
 
-const isEven = (num: number) => num % 2 === 0;
-
-///
-
-const getWordsAnchors = (charList: CharList, words: string): IWordsAnchors => {
-  const smartRound =
-    !isEven(words.length) && !isEven(charList.length) ? Math.floor : Math.ceil;
-  const halfLen = smartRound(charList.length / 2);
-  const halfWord = Math.floor(words.length / 2);
-  const leftAnchor = halfLen - halfWord;
-  const rightAnchor = leftAnchor + (words.length - 1);
-
-  return { leftAnchor, rightAnchor };
-};
-
-/* -------------------------------- Injectors ------------------------------- */
-
-const withLimiters = (leftLim: string, rightLim: string) => (
-  charList: CharList
-): CharList => {
-  const rightLimAnchor = charList.length - rightLim.length;
-
-  return charList.map((char, i) => {
-    // Insert left limiter
-    if (i < leftLim.length) return leftLim[i];
-    // Insert right limiter
-    else if (i >= rightLimAnchor) return rightLim[i - rightLimAnchor];
-    // Insert gaps after/before non-empty limiters
-    else if (
-      (leftLim.length && i === leftLim.length) ||
-      (rightLim.length && i === rightLimAnchor - 1)
-    )
-      return GAP_SYM;
-    // Pass other chars
-    else return char;
-  });
+  return margins;
 };
 
 ///
 
-const withWords = (words: string) => (charList: CharList): CharList => {
-  const { leftAnchor, rightAnchor } = getWordsAnchors(charList, words);
+export const wrapWithMargins = (content: string, line: TextLine): string => {
+  const margins = computeMargins(line);
 
-  return charList.map((char, i) => {
-    // Insert words
-    if (i >= leftAnchor && i <= rightAnchor) return words[i - leftAnchor];
-    // Insert gaps before/after words
-    else if (i === leftAnchor - 1 || i === rightAnchor + 1) return GAP_SYM;
-    // Pass other chars
-    else return char;
-  });
+  const before: string = margins.top ? NEW_LINE_SYM : '';
+  const after: string = margins.bottom ? NEW_LINE_SYM : '';
+
+  return before + content + after;
 };
 
 ///
 
-const passToNextInjector = (charList: CharList) => charList;
-
-///
-
-const composeInjectors = (...injectors) => (charList: CharList) =>
-  injectors.reduce((res: CharList, injector) => injector(res), charList);
-
-/* ------------------------------ Line Builders ----------------------------- */
-
-const buildLine = (config: IConfig, words?: string) => {
-  const injectLimiters = withLimiters(config.limiters.left, config.limiters.right);
-  const injectWords = words ? withWords(words) : passToNextInjector;
-
-  const blankCharList = buildCharList(config.lineLen, config.sym);
-  const computedCharList = composeInjectors(injectLimiters, injectWords)(blankCharList);
-
-  return charListToString(computedCharList);
-};
+export const wrapWithLinebreaker = (content: string): string => content + NEW_LINE_SYM;
 
 /* --------------------------------- Renders -------------------------------- */
 
-export const renderSubHeader = (text: string, lang: string): string => {
-  const config = mergePresetWithLimiters(
-    getPreset('subheader'),
-    getLanguageLimiters(lang)
-  );
+export const renderHeader = (
+  type: Exclude<PresetId, 'line'>,
+  rawText: string,
+  lang: string
+): string => {
+  const config = getConfig(type, lang);
+  const croppedText = rawText.trim();
 
-  checkCommentChars(text, config.limiters);
-  checkLongText(text, config.lineLen, config.limiters);
+  checkCommentChars(croppedText, config.limiters);
+  checkLongText(croppedText, config.lineLen, config.limiters);
+  checkFillerLen(config.sym);
 
-  return buildLine(config, text);
-};
-
-///
-
-export const renderMainHeader = (text: string, lang: string): string => {
-  const config = mergePresetWithLimiters(
-    getPreset('mainheader'),
-    getLanguageLimiters(lang)
-  );
-
-  checkCommentChars(text, config.limiters);
-  checkLongText(text, config.lineLen, config.limiters);
-
-  const textConfig = { ...config, sym: GAP_SYM };
-  const topLine = buildLine(config);
-  const textLine = buildLine(textConfig, text.toUpperCase());
-  const bottomLine = buildLine(config);
-
-  return topLine + NEW_LINE_SYM + textLine + NEW_LINE_SYM + bottomLine;
+  const transformedWords = TRANSFORM_MAP[config.transform](croppedText);
+  const build = BUILDERS_MAP[config.height];
+  return build(config, transformedWords);
 };
 
 ///
 
 export const renderLine = (lang: string): string => {
-  const config = mergePresetWithLimiters(getPreset('line'), getLanguageLimiters(lang));
+  const config = getConfig('line', lang);
 
-  return buildLine(config);
+  checkFillerLen(config.sym);
+
+  const build = buildSolidLine;
+  return build(config);
 };

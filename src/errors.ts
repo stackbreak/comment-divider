@@ -1,19 +1,17 @@
-/* ========================================================================== */
-/*                                   ERRORS                                   */
-/* ========================================================================== */
-
 import { window, Selection, TextLine } from 'vscode';
 
 import { EXT_NAME } from './constants';
-import { ILimiters } from './limiters';
+import { ILimiters } from './types';
 
 ///
 
 export const ERRORS = {
-  EMPTY_LINE: 'EmptyLine',
-  MULTI_LINE: 'MultiLine',
-  LONG_TEXT: 'LongText',
-  COMMENT_CHARS: 'CommentChars'
+  EMPTY_LINE: 'Line should contain at least one character!',
+  MULTI_LINE: 'Selection should be on single line!',
+  LONG_TEXT:
+    'Too many characters! Increase divider length in settings or use less characters.',
+  COMMENT_CHARS: 'Line contains comment characters!',
+  FILLER_LEN: 'Incorrect filler symbol!'
 };
 
 /* --------------------------------- Helpers -------------------------------- */
@@ -24,20 +22,20 @@ const showErrorMsg = (msg: string) =>
 /* -------------------------------- Checkers -------------------------------- */
 
 export const checkMultiLineSelection = (selection: Selection) => {
-  if (!selection.isSingleLine) throw new Error(ERRORS.MULTI_LINE);
+  if (!selection.isSingleLine) throw new Error('MULTI_LINE');
 };
 
 ///
 
 export const checkEmptyLine = (line: TextLine) => {
-  if (line.isEmptyOrWhitespace) throw new Error(ERRORS.EMPTY_LINE);
+  if (line.isEmptyOrWhitespace) throw new Error('EMPTY_LINE');
 };
 
 ///
 
 export const checkCommentChars = (text: string, limiters: ILimiters) => {
   if (text.includes(limiters.left) || text.includes(limiters.right))
-    throw new Error(ERRORS.COMMENT_CHARS);
+    throw new Error('COMMENT_CHARS');
 };
 
 ///
@@ -47,29 +45,18 @@ export const checkLongText = (text: string, lineLen: number, limiters: ILimiters
   const gapsCount = 4;
   const minFillerCount = 2;
   const maxAllowedLen = lineLen - (limitersLen + gapsCount + minFillerCount);
-  if (text.length > maxAllowedLen) throw new Error(ERRORS.LONG_TEXT);
+  if (text.length > maxAllowedLen) throw new Error('LONG_TEXT');
+};
+
+///
+
+export const checkFillerLen = (fillerSym: string) => {
+  if (fillerSym.length !== 1) throw new Error('FILLER_LEN');
 };
 
 /* --------------------------------- Handler -------------------------------- */
 
 export const handleError = (e: Error) => {
-  switch (e.message) {
-    case ERRORS.EMPTY_LINE:
-      showErrorMsg('Line should contain at least one character!');
-      break;
-
-    case ERRORS.MULTI_LINE:
-      showErrorMsg('Selection should be on single line!');
-      break;
-
-    case ERRORS.LONG_TEXT:
-      showErrorMsg(
-        'Too many characters! Increase divider length in settings or use less characters.'
-      );
-      break;
-
-    case ERRORS.COMMENT_CHARS:
-      showErrorMsg('Line contains comment characters!');
-      break;
-  }
+  const errorMsg = ERRORS[e.message];
+  if (errorMsg !== undefined) showErrorMsg(errorMsg);
 };

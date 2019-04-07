@@ -1,41 +1,31 @@
-/* ========================================================================== */
-/*                                READ SETTINGS                               */
-/* ========================================================================== */
-
 import { workspace } from 'vscode';
 
-import { GAP_SYM, EXT_ID } from './constants';
-import { ILimiters } from './limiters';
+import { EXT_ID } from './constants';
+import { getLanguageLimiters } from './limiters';
+import { IPreset, ILimiters, IConfig, PresetId, Height, Align, Transform } from './types';
 
 ///
 
-type PresetId = 'empty' | 'subheader' | 'mainheader' | 'line';
-
-interface IPreset {
-  lineLen: number;
-  sym: string;
-}
-
-export interface IConfig extends IPreset {
-  limiters: ILimiters;
-}
-
-/* ----------------------------- Config Builder ----------------------------- */
-
-export const getPreset = (type: PresetId): IPreset => {
+const getPreset = (type: PresetId): IPreset => {
   const section = workspace.getConfiguration(EXT_ID);
-  const lineLen: number = section.get('length');
-  const sym: string = type === 'empty' ? GAP_SYM : section.get(`${type}-filler`);
 
-  return { lineLen, sym };
+  const lineLen = section.get<number>('length');
+  const sym = section.get<string>(`${type}Filler`);
+  const height = section.get<Height>(`${type}Height`);
+  const align = section.get<Align>(`${type}Align`);
+  const transform = section.get<Transform>(`${type}Transform`);
+
+  return { lineLen, sym, height, align, transform };
 };
 
 ///
 
-export const mergePresetWithLimiters = (
-  preset: IPreset,
-  limiters: ILimiters
-): IConfig => ({
+const mergePresetWithLimiters = (preset: IPreset, limiters: ILimiters): IConfig => ({
   ...preset,
   limiters
 });
+
+///
+
+export const getConfig = (presetId: PresetId, lang: string): IConfig =>
+  mergePresetWithLimiters(getPreset(presetId), getLanguageLimiters(lang));

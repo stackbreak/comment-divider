@@ -1,11 +1,4 @@
-/* ========================================================================== */
-/*                             LIMITERS COLLECTION                            */
-/* ========================================================================== */
-
-export interface ILimiters {
-  left: string;
-  right: string;
-}
+import { ILimiters } from './types';
 
 ///
 
