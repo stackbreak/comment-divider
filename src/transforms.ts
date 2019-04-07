@@ -1,4 +1,5 @@
 import { Transform } from './types';
+import { GAP_SYM } from './constants';
 
 ///
 
@@ -10,13 +11,13 @@ const toUpperCase = (words: string): string => words.toUpperCase();
 
 const toTitleCase = (words: string): string =>
   words
-    .split(' ')
+    .split(GAP_SYM)
     .map((word) =>
       Array.from(word)
         .map((char, idx) => (idx === 0 ? char.toUpperCase() : char))
         .join('')
     )
-    .join(' ');
+    .join(GAP_SYM);
 
 ///
 
