@@ -14,7 +14,7 @@ import { Action } from './types';
 export const insertMainHeader: Action = (line, lang) => {
   checkEmptyLine(line);
 
-  const rendered = renderHeader('mainheader', line.text, lang);
+  const rendered = renderHeader('mainHeader', line.text, lang);
   const content = wrapWithMargins(rendered, line);
 
   window.activeTextEditor

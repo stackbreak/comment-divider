@@ -4,7 +4,7 @@ import { TextLine } from 'vscode';
 
 export type Action = (line: TextLine, lang: string) => void;
 
-export type PresetId = 'subheader' | 'mainheader' | 'line';
+export type PresetId = 'subheader' | 'mainHeader' | 'line';
 
 export type Height = 'line' | 'block';
 export type Align = 'left' | 'center' | 'right';

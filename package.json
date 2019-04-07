@@ -72,21 +72,23 @@
           "default": 80,
           "description": "Set line length for all dividers."
         },
-        "comment-divider.mainheaderFiller": {
+        "comment-divider.mainHeaderFiller": {
           "type": "string",
+          "minLength": 1,
+          "maxLength": 1,
           "default": "-",
-          "description": "Set symbol for main header line filling."
+          "description": "Set symbol for main header line filling (only one)."
         },
-        "comment-divider.mainheaderHeight": {
+        "comment-divider.mainHeaderHeight": {
           "type": "string",
           "enum": [
             "block",
             "line"
           ],
           "default": "block",
-          "description": ":"
+          "description": "Set main header vertical style."
         },
-        "comment-divider.mainheaderAlign": {
+        "comment-divider.mainHeaderAlign": {
           "type": "string",
           "enum": [
             "center",
@@ -94,9 +96,9 @@
             "right"
           ],
           "default": "center",
-          "description": ":"
+          "description": "Set main header text align."
         },
-        "comment-divider.mainheaderTransform": {
+        "comment-divider.mainHeaderTransform": {
           "type": "string",
           "enum": [
             "uppercase",
@@ -104,13 +106,15 @@
             "titlecase",
             "none"
           ],
-          "default": "uppercase",
-          "description": ":"
+          "default": "none",
+          "description": "Set main header text transform style."
         },
         "comment-divider.subheaderFiller": {
           "type": "string",
+          "minLength": 1,
+          "maxLength": 1,
           "default": "-",
-          "description": "Set symbol for subheader line filling."
+          "description": "Set symbol for subheader line filling (only one)."
         },
         "comment-divider.subheaderHeight": {
           "type": "string",
@@ -119,7 +123,7 @@
             "line"
           ],
           "default": "line",
-          "description": ":"
+          "description": "Set subheader vertical style."
         },
         "comment-divider.subheaderAlign": {
           "type": "string",
@@ -129,7 +133,7 @@
             "right"
           ],
           "default": "center",
-          "description": ":"
+          "description": "Set subheader text align."
         },
         "comment-divider.subheaderTransform": {
           "type": "string",
@@ -139,8 +143,8 @@
             "titlecase",
             "none"
           ],
-          "default": "titlecase",
-          "description": ":"
+          "default": "none",
+          "description": "Set subheader text transform style."
         },
         "comment-divider.lineFiller": {
           "type": "string",

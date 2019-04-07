@@ -2,7 +2,7 @@ import { TextLine, window } from 'vscode';
 
 import { getConfig } from './config';
 import { NEW_LINE_SYM } from './constants';
-import { checkLongText, checkCommentChars } from './errors';
+import { checkLongText, checkCommentChars, checkFillerLen } from './errors';
 import { BUILDERS_MAP, buildSolidLine } from './builders';
 import { TRANSFORM_MAP } from './transforms';
 import { PresetId, IMargins } from './types';
@@ -56,10 +56,10 @@ export const renderHeader = (
 
   checkCommentChars(croppedText, config.limiters);
   checkLongText(croppedText, config.lineLen, config.limiters);
+  checkFillerLen(config.sym);
 
   const transformedWords = TRANSFORM_MAP[config.transform](croppedText);
   const build = BUILDERS_MAP[config.height];
-
   return build(config, transformedWords);
 };
 
@@ -67,7 +67,9 @@ export const renderHeader = (
 
 export const renderLine = (lang: string): string => {
   const config = getConfig('line', lang);
-  const build = buildSolidLine;
 
+  checkFillerLen(config.sym);
+
+  const build = buildSolidLine;
   return build(config);
 };

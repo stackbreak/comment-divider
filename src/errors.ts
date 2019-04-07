@@ -10,7 +10,8 @@ export const ERRORS = {
   MULTI_LINE: 'Selection should be on single line!',
   LONG_TEXT:
     'Too many characters! Increase divider length in settings or use less characters.',
-  COMMENT_CHARS: 'Line contains comment characters!'
+  COMMENT_CHARS: 'Line contains comment characters!',
+  FILLER_LEN: 'Incorrect filler symbol!'
 };
 
 /* --------------------------------- Helpers -------------------------------- */
@@ -45,6 +46,12 @@ export const checkLongText = (text: string, lineLen: number, limiters: ILimiters
   const minFillerCount = 2;
   const maxAllowedLen = lineLen - (limitersLen + gapsCount + minFillerCount);
   if (text.length > maxAllowedLen) throw new Error('LONG_TEXT');
+};
+
+///
+
+export const checkFillerLen = (fillerSym: string) => {
+  if (fillerSym.length !== 1) throw new Error('FILLER_LEN');
 };
 
 /* --------------------------------- Handler -------------------------------- */
