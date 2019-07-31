@@ -119,7 +119,7 @@ or in html files
 
 ```json
   // Set symbol for solid line filling.
-  "comment-divider.line-filler": "-",
+  "comment-divider.lineFiller": "-",
 ```
 
 ## Issues
