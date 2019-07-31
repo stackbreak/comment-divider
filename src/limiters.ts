@@ -61,6 +61,8 @@ export const getLanguageLimiters = (lang?: string): ILimiters => {
     case 'clojure':
     case 'lisp':
     case 'scheme':
+    case 'ini':
+    case 'rainmeter':
       return wrapLimiters(';', ';');
 
     case 'elm':
