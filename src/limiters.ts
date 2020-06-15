@@ -48,6 +48,7 @@ export const getLanguageLimiters = (lang?: string): ILimiters => {
     case 'shellscript':
     case 'yaml':
     case 'yml':
+    case 'home-assistant':
       return wrapLimiters('#', '#');
 
     case 'html':
