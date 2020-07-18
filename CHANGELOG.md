@@ -2,6 +2,12 @@
 
 All notable changes to the "Comment Divider" extension will be documented in this file.
 
+## [0.2.2] - 2020-07-19
+
+### Enhancement
+
+- Include [alryaz](https://github.com/alryaz) patch for support `*.home-assistant` files.
+
 ## [0.2.1] - 2019-07-31
 
 ### Fixed

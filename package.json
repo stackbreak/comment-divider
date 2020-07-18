@@ -2,7 +2,7 @@
   "name": "comment-divider",
   "displayName": "Comment Divider",
   "description": "Divide your code by sections with styled separators.",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "publisher": "stackbreak",
   "license": "GPL-3.0",
   "icon": "img/logo_256.png",
