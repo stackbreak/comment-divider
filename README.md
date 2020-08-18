@@ -103,16 +103,16 @@ or in html files
 
 ```json
   // "Set symbol for subheader line filling (only one).
-  "comment-divider.subHeaderFiller": "-",
+  "comment-divider.subheaderFiller": "-",
 
   // Set subheader vertical style.
-  "comment-divider.subHeaderHeight": "line",
+  "comment-divider.subheaderHeight": "line",
 
   // Set subheader text align.
-  "comment-divider.subHeaderAlign": "center",
+  "comment-divider.subheaderAlign": "center",
 
   // Set subheader text transform style.
-  "comment-divider.subHeaderTransform": "none",
+  "comment-divider.subheaderTransform": "none",
 ```
 
 ### Solid Line
