@@ -1,7 +1,7 @@
 import { window, Selection, TextLine } from 'vscode';
 
 import { EXT_NAME } from './constants';
-import { ILimiters } from './types';
+import { IConfig, ILimiters } from './types';
 
 ///
 
@@ -18,6 +18,17 @@ export const ERRORS = {
 
 const showErrorMsg = (msg: string) =>
   window.showInformationMessage(`${EXT_NAME}: ${msg}`);
+
+const getMaxAllowedLen = (config: IConfig, indentLen: number = 0) => {
+  const limitersLen = config.limiters.left.length + config.limiters.right.length;
+  const gapsCount = 4;
+  const minFillerCount = 2;
+  return config.lineLen
+    - limitersLen
+    - gapsCount
+    - minFillerCount
+    - (config.fixLen ? indentLen : 0);
+};
 
 /* -------------------------------- Checkers -------------------------------- */
 
@@ -40,11 +51,8 @@ export const checkCommentChars = (text: string, limiters: ILimiters) => {
 
 ///
 
-export const checkLongText = (text: string, lineLen: number, limiters: ILimiters) => {
-  const limitersLen = limiters.left.length + limiters.right.length;
-  const gapsCount = 4;
-  const minFillerCount = 2;
-  const maxAllowedLen = lineLen - (limitersLen + gapsCount + minFillerCount);
+export const checkLongText = (text: string, config: IConfig, indentLen: number) => {
+  const maxAllowedLen = getMaxAllowedLen(config, indentLen);
   if (text.length > maxAllowedLen) throw new Error('LONG_TEXT');
 };
 

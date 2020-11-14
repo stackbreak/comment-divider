@@ -5,12 +5,19 @@ import { NEW_LINE_SYM } from './constants';
 import { checkLongText, checkCommentChars, checkFillerLen } from './errors';
 import { BUILDERS_MAP, buildSolidLine } from './builders';
 import { TRANSFORM_MAP } from './transforms';
-import { PresetId, IMargins } from './types';
+import { PresetId, IMargins, IConfig } from './types';
 
 /* --------------------------------- Helpers -------------------------------- */
 
 const isEmptyLine = (lineNum: number) =>
   window.activeTextEditor.document.lineAt(lineNum).isEmptyOrWhitespace;
+
+// Fixes lineLength according to indentLen if fixLen enabled
+const fixConfigLen = (config: IConfig, indentLen: number) =>
+  config.fixLen ? { ...config, lineLen: config.lineLen - indentLen } : config;
+
+const convertTabsToSpaces = (str: string, tabWidth: number): string =>
+  str.split('\t').join(' '.repeat(tabWidth));
 
 /* --------------------------------- Margins -------------------------------- */
 
@@ -42,34 +49,49 @@ export const wrapWithMargins = (content: string, line: TextLine): string => {
 
 ///
 
-export const wrapWithLinebreaker = (content: string): string => content + NEW_LINE_SYM;
+export const wrapWithLineBreaker = (content: string): string => content + NEW_LINE_SYM;
 
 /* --------------------------------- Renders -------------------------------- */
 
-export const renderHeader = (
-  type: Exclude<PresetId, 'line'>,
-  rawText: string,
-  lang: string
-): string => {
-  const config = getConfig(type, lang);
+export const renderComment = (type: PresetId, rawText: string, lang: string): string => {
+  const tabWidth = +window.activeTextEditor.options.tabSize;
+  // Get leading whitespaces and replace tabs with spaces
+  const indent = convertTabsToSpaces(rawText.match(/^\s*/)[0], tabWidth);
+
+  const config = fixConfigLen(getConfig(type, lang), indent.length);
   const croppedText = rawText.trim();
 
-  checkCommentChars(croppedText, config.limiters);
-  checkLongText(croppedText, config.lineLen, config.limiters);
-  checkFillerLen(config.sym);
-
-  const transformedWords = TRANSFORM_MAP[config.transform](croppedText);
-  const build = BUILDERS_MAP[config.height];
-  return build(config, transformedWords);
+  switch (type) {
+    case 'line':
+      return renderLine(config, indent);
+    case 'mainHeader':
+      return renderHeader(croppedText, config, indent);
+    case 'subheader':
+      return renderHeader(croppedText, config, indent);
+  }
 };
 
 ///
 
-export const renderLine = (lang: string): string => {
-  const config = getConfig('line', lang);
+export const renderHeader = (
+  text: string,
+  config: IConfig,
+  indent: string = ''
+): string => {
+  checkCommentChars(text, config.limiters);
+  checkLongText(text, config, indent.length);
+  checkFillerLen(config.sym);
 
+  const transformedWords = TRANSFORM_MAP[config.transform](text);
+  const build = BUILDERS_MAP[config.height];
+  return build(config, transformedWords, indent);
+};
+
+///
+
+export const renderLine = (config: IConfig, indent: string = ''): string => {
   checkFillerLen(config.sym);
 
   const build = buildSolidLine;
-  return build(config);
+  return build(config, indent);
 };
