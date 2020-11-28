@@ -1,4 +1,6 @@
 import { ILimiters } from './types';
+import { workspace } from 'vscode';
+import { EXT_ID } from './constants';
 
 ///
 
@@ -93,6 +95,31 @@ export const getLanguageLimiters = (lang?: string): ILimiters => {
       return wrapLimiters('#', '#');
 
     default:
-      return wrapLimiters('/*', '*/');
+      return getLanguageCommentStr(lang);
   }
 };
+
+// waiting for issue: https://github.com/microsoft/vscode/issues/2871
+export interface ILanguagesAssociations {
+  name: string;
+  value: string;
+}
+
+const getLanguageCommentStr = (lang: string): ILimiters => {
+  const values = readLanguagesAssociationsConfiguration<ILanguagesAssociations[]>();
+  let returnValue: ILimiters = wrapLimiters('/*', '*/');
+
+  values.forEach(element => {
+    if (element.name === lang) {
+      returnValue = wrapLimiters(element.value, element.value);
+    }
+  });
+  return returnValue;
+};
+
+export function readLanguagesAssociationsConfiguration<T>(defaultValue?: T | undefined) {
+  const value: T | undefined = workspace
+    .getConfiguration(EXT_ID)
+    .get<T | undefined>("languages.associations", defaultValue);
+  return value as T;
+}

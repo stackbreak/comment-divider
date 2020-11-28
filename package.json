@@ -152,6 +152,14 @@
           "maxLength": 1,
           "default": "-",
           "description": "Set symbol for solid line filling."
+        },
+        "comment-divider.languages.associations": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "object"
+          },
+          "description": "Set language with a comment character"
         }
       }
     }
