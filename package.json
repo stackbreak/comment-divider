@@ -157,9 +157,23 @@
           "type": "array",
           "default": [],
           "items": {
-            "type": "object"
+            "type": "object",
+            "properties": {
+              "language": {
+                "type": "string",
+                "description": "Name of the language mode given by VSCode"
+              },
+              "start_string": {
+                "type": "string",
+                "description": "String to use a the beginning of the line"
+              },
+              "end_string": {
+                "type": "string",
+                "description": "String to use at the end of the line"
+              }
+            }
           },
-          "description": "Set language with a comment character"
+          "description": "Array of language with their comment character to be used for the banner"
         }
       }
     }

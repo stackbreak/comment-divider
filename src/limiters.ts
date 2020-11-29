@@ -101,20 +101,21 @@ export const getLanguageLimiters = (lang?: string): ILimiters => {
 
 // waiting for issue: https://github.com/microsoft/vscode/issues/2871
 export interface ILanguagesAssociations {
-  name: string;
-  value: string;
+  language: string;
+  start_string: string;
+  end_string: string;
 }
 
-const getLanguageCommentStr = (lang: string): ILimiters => {
-  const values = readLanguagesAssociationsConfiguration<ILanguagesAssociations[]>();
-  let returnValue: ILimiters = wrapLimiters('/*', '*/');
+const getLanguageCommentStr = (language: string): ILimiters => {
+  const languageConfig = readLanguagesAssociationsConfiguration<ILanguagesAssociations[]>();
+  let returnLimiters: ILimiters = wrapLimiters('/*', '*/');
 
-  values.forEach(element => {
-    if (element.name === lang) {
-      returnValue = wrapLimiters(element.value, element.value);
+  languageConfig.forEach(element => {
+    if (element.language === language) {
+      returnLimiters = wrapLimiters(element.start_string, element.end_string);
     }
   });
-  return returnValue;
+  return returnLimiters;
 };
 
 export function readLanguagesAssociationsConfiguration<T>(defaultValue?: T | undefined) {
