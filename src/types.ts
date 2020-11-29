@@ -43,6 +43,6 @@ export interface IWordsAnchors {
 
 export interface ILanguagesAssociations {
   language: string;
-  start_string: string;
-  end_string: string;
+  startString: string;
+  endString: string;
 }

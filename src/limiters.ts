@@ -106,7 +106,7 @@ const getLanguageCommentStr = (language: string): ILimiters => {
 
   languageConfig.forEach(element => {
     if (element.language === language) {
-      returnLimiters = wrapLimiters(element.start_string, element.end_string || element.start_string);
+      returnLimiters = wrapLimiters(element.startString, element.endString || element.startString);
     }
   });
   return returnLimiters;
@@ -115,6 +115,6 @@ const getLanguageCommentStr = (language: string): ILimiters => {
 export function readLanguagesAssociationsConfiguration<T>(defaultValue?: T | undefined) {
   const value: T | undefined = workspace
     .getConfiguration(EXT_ID)
-    .get<T | undefined>("languages.associations", defaultValue);
+    .get<T | undefined>("languagesAssociations", defaultValue);
   return value as T;
 }

@@ -153,25 +153,27 @@
           "default": "-",
           "description": "Set symbol for solid line filling."
         },
-        "comment-divider.languages.associations": {
+        "comment-divider.languagesAssociations": {
           "type": "array",
           "default": [],
+          "uniqueItems": true,
           "items": {
             "type": "object",
             "required": [
               "language",
-              "start_string"
+              "startString"
             ],
+            "uniqueItems": true,
             "properties": {
               "language": {
                 "type": "string",
                 "description": "Name of the language mode given by VSCode"
               },
-              "start_string": {
+              "startString": {
                 "type": "string",
                 "description": "String to use a the beginning of the line"
               },
-              "end_string": {
+              "endString": {
                 "type": "string",
                 "description": "String to use at the end of the line"
               }
