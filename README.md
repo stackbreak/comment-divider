@@ -122,6 +122,22 @@ or in html files
   "comment-divider.lineFiller": "-",
 ```
 
+### New Language Comment
+
+If a language is not supported by the extension, it is possible to add it in the settings.
+
+```json
+"comment-divider.languagesAssociations": [
+  {
+      "language": "toml",
+      "startString": "#",
+      "endString": "#"
+  }
+],
+```
+
+The language and start_string are required. If the end_string is not defined, the start_string will be used to terminate the line.
+
 ## Issues
 
 Request features and report bugs using [GitHub](https://github.com/stackbreak/comment-divider/issues).
