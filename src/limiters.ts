@@ -1,4 +1,4 @@
-import { ILimiters } from './types';
+import { ILimiters, ILanguagesAssociations } from './types';
 import { workspace } from 'vscode';
 import { EXT_ID } from './constants';
 
@@ -100,19 +100,13 @@ export const getLanguageLimiters = (lang?: string): ILimiters => {
 };
 
 // waiting for issue: https://github.com/microsoft/vscode/issues/2871
-export interface ILanguagesAssociations {
-  language: string;
-  start_string: string;
-  end_string: string;
-}
-
 const getLanguageCommentStr = (language: string): ILimiters => {
   const languageConfig = readLanguagesAssociationsConfiguration<ILanguagesAssociations[]>();
   let returnLimiters: ILimiters = wrapLimiters('/*', '*/');
 
   languageConfig.forEach(element => {
     if (element.language === language) {
-      returnLimiters = wrapLimiters(element.start_string, element.end_string);
+      returnLimiters = wrapLimiters(element.start_string, element.end_string || element.start_string);
     }
   });
   return returnLimiters;

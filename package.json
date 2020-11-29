@@ -158,6 +158,10 @@
           "default": [],
           "items": {
             "type": "object",
+            "required": [
+              "language",
+              "start_string"
+            ],
             "properties": {
               "language": {
                 "type": "string",
