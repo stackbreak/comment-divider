@@ -121,7 +121,7 @@ export function readLanguagesAssociationsConfigurationV1<T>(defaultValue?: T | u
 }
 
 const getLanguageCommentStrV2 = (language: string): ILimiters => {
-  const languageConfig = readLanguagesAssociationsConfigurationV2();
+  const languageConfig = readLanguagesAssociationsConfigurationV2V3("languagesAssociationsV2");
   const languageComment: Object = languageConfig.globalValue;
   let returnLimiters: ILimiters = wrapLimiters('/*', '*/');
   returnLimiters = undefined;
@@ -133,13 +133,8 @@ const getLanguageCommentStrV2 = (language: string): ILimiters => {
   return returnLimiters;
 };
 
-export function readLanguagesAssociationsConfigurationV2() {
-  const value = workspace.getConfiguration(EXT_ID).inspect("languagesAssociationsV2");
-  return value;
-}
-
 const getLanguageCommentStrV3 = (language: string): ILimiters => {
-  const languageConfig = readLanguagesAssociationsConfigurationV3();
+  const languageConfig = readLanguagesAssociationsConfigurationV2V3("languagesAssociationsV3");
   const languageComment: Object = languageConfig.globalValue;
   let returnLimiters: ILimiters = wrapLimiters('/*', '*/');
   returnLimiters = undefined;
@@ -151,7 +146,7 @@ const getLanguageCommentStrV3 = (language: string): ILimiters => {
   return returnLimiters;
 };
 
-export function readLanguagesAssociationsConfigurationV3() {
-  const value = workspace.getConfiguration(EXT_ID).inspect("languagesAssociationsV3");
+export function readLanguagesAssociationsConfigurationV2V3(subConfig: string) {
+  const value = workspace.getConfiguration(EXT_ID).inspect(subConfig);
   return value;
 }
