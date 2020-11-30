@@ -153,7 +153,7 @@ The item name is the language mode name and is associated with an array of 1 or 
   "toml": {
       "startString": "#",
       "endString": "#"
-  },
+  }
 }
 ```
 
