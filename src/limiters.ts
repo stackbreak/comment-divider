@@ -95,14 +95,15 @@ export const getLanguageLimiters = (lang?: string): ILimiters => {
       return wrapLimiters('#', '#');
 
     default:
-      return getLanguageCommentStr(lang);
+      return getLanguageCommentStrV1(lang) || getLanguageCommentStrV2(lang) || getLanguageCommentStrV3(lang) || wrapLimiters('/*', '*/');
   }
 };
 
 // waiting for issue: https://github.com/microsoft/vscode/issues/2871
-const getLanguageCommentStr = (language: string): ILimiters => {
-  const languageConfig = readLanguagesAssociationsConfiguration<ILanguagesAssociations[]>();
+const getLanguageCommentStrV1 = (language: string): ILimiters => {
+  const languageConfig = readLanguagesAssociationsConfigurationV1<ILanguagesAssociations[]>();
   let returnLimiters: ILimiters = wrapLimiters('/*', '*/');
+  returnLimiters = undefined;
 
   languageConfig.forEach(element => {
     if (element.language === language) {
@@ -112,9 +113,45 @@ const getLanguageCommentStr = (language: string): ILimiters => {
   return returnLimiters;
 };
 
-export function readLanguagesAssociationsConfiguration<T>(defaultValue?: T | undefined) {
+export function readLanguagesAssociationsConfigurationV1<T>(defaultValue?: T | undefined) {
   const value: T | undefined = workspace
     .getConfiguration(EXT_ID)
-    .get<T | undefined>("languagesAssociations", defaultValue);
+    .get<T | undefined>("languagesAssociationsV1", defaultValue);
   return value as T;
+}
+
+const getLanguageCommentStrV2 = (language: string): ILimiters => {
+  const languageConfig = readLanguagesAssociationsConfigurationV2();
+  const languageComment: Object = languageConfig.globalValue;
+  let returnLimiters: ILimiters = wrapLimiters('/*', '*/');
+  returnLimiters = undefined;
+
+  if (Object.prototype.hasOwnProperty.call(languageComment, language)) {
+    returnLimiters = wrapLimiters(languageComment[language][0], languageComment[language][1] || languageComment[language][0]);
+  }
+
+  return returnLimiters;
+};
+
+export function readLanguagesAssociationsConfigurationV2() {
+  const value = workspace.getConfiguration(EXT_ID).inspect("languagesAssociationsV2");
+  return value;
+}
+
+const getLanguageCommentStrV3 = (language: string): ILimiters => {
+  const languageConfig = readLanguagesAssociationsConfigurationV3();
+  const languageComment: Object = languageConfig.globalValue;
+  let returnLimiters: ILimiters = wrapLimiters('/*', '*/');
+  returnLimiters = undefined;
+
+  if (Object.prototype.hasOwnProperty.call(languageComment, language)) {
+    returnLimiters = wrapLimiters(languageComment[language].startString, languageComment[language].endString || languageComment[language].startString);
+  }
+
+  return returnLimiters;
+};
+
+export function readLanguagesAssociationsConfigurationV3() {
+  const value = workspace.getConfiguration(EXT_ID).inspect("languagesAssociationsV3");
+  return value;
 }

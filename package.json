@@ -153,7 +153,7 @@
           "default": "-",
           "description": "Set symbol for solid line filling."
         },
-        "comment-divider.languagesAssociations": {
+        "comment-divider.languagesAssociationsV1": {
           "type": "array",
           "default": [],
           "uniqueItems": true,
@@ -164,6 +164,7 @@
               "startString"
             ],
             "uniqueItems": true,
+            "additionalProperties": false,
             "properties": {
               "language": {
                 "type": "string",
@@ -179,6 +180,50 @@
               }
             }
           },
+          "description": "Array of language with their comment character to be used for the banner"
+        },
+        "comment-divider.languagesAssociationsV2": {
+          "type": "object",
+          "uniqueItems": true,
+          "patternProperties": {
+            "^[\\w\\-\\.]+$": {
+              "type": "array",
+              "description": "Name of the language mode given by VSCode",
+              "minItems": 1,
+              "maxItems": 2,
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": false,
+          "description": "Array of language with their comment character to be used for the banner"
+        },
+        "comment-divider.languagesAssociationsV3": {
+          "type": "object",
+          "uniqueItems": true,
+          "patternProperties": {
+            "^[\\w\\-\\.]+$": {
+              "type": "object",
+              "description": "Name of the language mode given by VSCode",
+              "required": [
+                "startString"
+              ],
+              "uniqueItems": true,
+              "additionalProperties": false,
+              "properties": {
+                "startString": {
+                  "type": "string",
+                  "description": "String to use a the beginning of the line"
+                },
+                "endString": {
+                  "type": "string",
+                  "description": "String to use at the end of the line"
+                }
+              }
+            }
+          },
+          "additionalProperties": false,
           "description": "Array of language with their comment character to be used for the banner"
         }
       }
