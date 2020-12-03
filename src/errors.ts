@@ -41,7 +41,11 @@ export const checkCommentChars = (text: string, limiters: ILimiters) => {
 ///
 
 export const checkLongText = (text: string, lineLen: number, limiters: ILimiters) => {
-  const limitersLen = limiters.left.length + limiters.right.length;
+  let limiterRightLength: number = 0;
+  if (typeof limiters.right === 'string') {
+    limiterRightLength = limiters.right.length;
+  }
+  const limitersLen = limiters.left.length + limiterRightLength;
   const gapsCount = 4;
   const minFillerCount = 2;
   const maxAllowedLen = lineLen - (limitersLen + gapsCount + minFillerCount);

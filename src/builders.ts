@@ -84,9 +84,10 @@ const getWordsAnchors = (
 
 /* -------------------------------- Injectors ------------------------------- */
 
-export const withLimiters = (leftLim: string, rightLim: string) => (
+export const withLimiters = (leftLim: string, rightLim: string | undefined) => (
   charList: CharList
 ): CharList => {
+  rightLim = rightLim || '';
   const rightLimAnchor = charList.length - rightLim.length;
 
   return charList.map((char, i) => {

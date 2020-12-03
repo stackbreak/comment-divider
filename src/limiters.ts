@@ -106,7 +106,7 @@ const getLanguageCommentStr = (language: string): ILimiters => {
   let returnLimiters: ILimiters = wrapLimiters('/*', '*/');
 
   if (Object.prototype.hasOwnProperty.call(languageComment, language)) {
-    returnLimiters = wrapLimiters(languageComment[language][0], languageComment[language][1] || languageComment[language][0]);
+    returnLimiters = wrapLimiters(languageComment[language][0], languageComment[language][1]);
   }
 
   return returnLimiters;
