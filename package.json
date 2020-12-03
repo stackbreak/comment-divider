@@ -153,36 +153,7 @@
           "default": "-",
           "description": "Set symbol for solid line filling."
         },
-        "comment-divider.languagesAssociationsV1": {
-          "type": "array",
-          "default": [],
-          "uniqueItems": true,
-          "items": {
-            "type": "object",
-            "required": [
-              "language",
-              "startString"
-            ],
-            "uniqueItems": true,
-            "additionalProperties": false,
-            "properties": {
-              "language": {
-                "type": "string",
-                "description": "Name of the language mode given by VSCode"
-              },
-              "startString": {
-                "type": "string",
-                "description": "String to use a the beginning of the line"
-              },
-              "endString": {
-                "type": "string",
-                "description": "String to use at the end of the line"
-              }
-            }
-          },
-          "description": "Array of language with their comment character to be used for the banner"
-        },
-        "comment-divider.languagesAssociationsV2": {
+        "comment-divider.languagesAssociations": {
           "type": "object",
           "uniqueItems": true,
           "patternProperties": {
@@ -193,33 +164,6 @@
               "maxItems": 2,
               "items": {
                 "type": "string"
-              }
-            }
-          },
-          "additionalProperties": false,
-          "description": "Array of language with their comment character to be used for the banner"
-        },
-        "comment-divider.languagesAssociationsV3": {
-          "type": "object",
-          "uniqueItems": true,
-          "patternProperties": {
-            "^[\\w\\-\\.]+$": {
-              "type": "object",
-              "description": "Name of the language mode given by VSCode",
-              "required": [
-                "startString"
-              ],
-              "uniqueItems": true,
-              "additionalProperties": false,
-              "properties": {
-                "startString": {
-                  "type": "string",
-                  "description": "String to use a the beginning of the line"
-                },
-                "endString": {
-                  "type": "string",
-                  "description": "String to use at the end of the line"
-                }
               }
             }
           },

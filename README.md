@@ -127,33 +127,9 @@ or in html files
 If a language is not supported by the extension, it is possible to add it in the settings.
 
 ```json
-"comment-divider.languagesAssociationsV1": [
-  {
-      "language": "toml",
-      "startString": "#",
-      "endString": "#"
-  }
-]
-```
-
-The item language take the language mode name. The language and start_string are required. If the end_string is not defined, the start_string will be used to terminate the line.
-
-```json
-"comment-divider.languagesAssociationsV2": [
-  {
+"comment-divider.languagesAssociations": {
       "toml": ["#", "#"],
-  }
-]
-```
-
-The item name is the language mode name and is associated with an array of 1 or 2 elements. The first element is the start of the line. The second, if defined, is the end. If the second element is not defined the first element is used to terminate the line.
-
-```json
-"comment-divider.languagesAssociationsV3": {
-  "toml": {
-      "startString": "#",
-      "endString": "#"
-  }
+      "scss": ["//"]
 }
 ```
 

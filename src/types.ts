@@ -40,9 +40,3 @@ export interface IWordsAnchors {
   leftAnchor: number;
   rightAnchor: number;
 }
-
-export interface ILanguagesAssociations {
-  language: string;
-  startString: string;
-  endString: string;
-}
