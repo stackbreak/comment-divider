@@ -135,6 +135,8 @@ If a language is not supported by the extension, it is possible to add it in the
 
 The item name is the language mode name and is associated with an array of 1 or 2 elements. The first element is the start of the line. The second, if defined, is the end. If the second element is not defined, the filler will be used until the end of the line.
 
+It is possible to change the characters used by the extension, for an already supported language, by adding the language in the `comment-divider.languagesAssociations` configuration with the new characters to use.
+
 ## Issues
 
 Request features and report bugs using [GitHub](https://github.com/stackbreak/comment-divider/issues).
