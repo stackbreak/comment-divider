@@ -8,7 +8,7 @@ const wrapLimiters = (left: string, right: string): ILimiters => ({ left, right 
 
 ///
 
-export const getLanguageLimiters = (lang?: string): ILimiters => {
+const getLanguageDefaultLimiters = (lang?: string): ILimiters => {
   switch (lang) {
     case 'c':
     case 'cpp':
@@ -95,24 +95,24 @@ export const getLanguageLimiters = (lang?: string): ILimiters => {
       return wrapLimiters('#', '#');
 
     default:
-      return getLanguageCommentStr(lang);
+      return wrapLimiters('/*', '*/');
   }
 };
 
 // waiting for issue: https://github.com/microsoft/vscode/issues/2871
-const getLanguageCommentStr = (language: string): ILimiters => {
+export function getLanguageLimiters(language: string): ILimiters {
   const languageConfig = readLanguagesAssociationsConfiguration("languagesAssociations");
   const languageComment: Object = languageConfig.globalValue;
-  let returnLimiters: ILimiters = wrapLimiters('/*', '*/');
+  let returnLimiters: ILimiters = getLanguageDefaultLimiters(language);
 
   if (Object.prototype.hasOwnProperty.call(languageComment, language)) {
     returnLimiters = wrapLimiters(languageComment[language][0], languageComment[language][1]);
   }
 
   return returnLimiters;
-};
+}
 
-export function readLanguagesAssociationsConfiguration(subConfig: string) {
+function readLanguagesAssociationsConfiguration(subConfig: string) {
   const value = workspace.getConfiguration(EXT_ID).inspect(subConfig);
   return value;
 }
