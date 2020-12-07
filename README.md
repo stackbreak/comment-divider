@@ -74,6 +74,8 @@ or in html files
 <!-- ---------------------------- html example ----------------------------- -->
 ```
 
+**Also, you can easily [add support](#languages-configuration) for any missing language or override the default preset.**
+
 ## Default Configuration
 
 ### Common
@@ -120,6 +122,29 @@ or in html files
 ```json
   // Set symbol for solid line filling.
   "comment-divider.lineFiller": "-",
+```
+
+## Languages Configuration
+
+If some language is not supported out of the box, or you want to change default comment characters for an already supported language, it is possible to do it in the settings.
+
+```json
+"comment-divider.languagesMap": {
+      "toml": ["#", "#"],
+      "scss": ["//"]
+}
+```
+
+The item name is the language mode name and is associated with an array of 1 or 2 elements. The first element is the start of the line. The second, if defined, is the end.
+
+The example above defines the right characters for `toml` and overrides `scss` defaults. As a result, the subheaders for these languages look like this:
+
+```toml
+# ------------------------------ toml subheader ------------------------------ #
+```
+
+```scss
+// ----------------------------- scss subheader --------------------------------
 ```
 
 ## Issues

@@ -1,4 +1,4 @@
-import { ILimiters } from './types';
+import { ILimiters, ILanguagesMapConfig } from './types';
 
 ///
 
@@ -6,7 +6,7 @@ const wrapLimiters = (left: string, right: string): ILimiters => ({ left, right 
 
 ///
 
-export const getLanguageLimiters = (lang?: string): ILimiters => {
+const getLanguageDefaultLimiters = (lang?: string): ILimiters => {
   switch (lang) {
     case 'c':
     case 'cpp':
@@ -96,3 +96,21 @@ export const getLanguageLimiters = (lang?: string): ILimiters => {
       return wrapLimiters('/*', '*/');
   }
 };
+
+// waiting for issue: https://github.com/microsoft/vscode/issues/2871
+export function getLanguageLimiters(
+  language: string,
+  getUserLanguagesMap: () => ILanguagesMapConfig
+): ILimiters {
+  let limiters: ILimiters;
+  const userLanguagesMap = getUserLanguagesMap();
+
+  if (userLanguagesMap !== undefined && userLanguagesMap[language] !== undefined) {
+    const currentLangArr = userLanguagesMap[language];
+    limiters = wrapLimiters(currentLangArr[0], currentLangArr[1] || '');
+  } else {
+    limiters = getLanguageDefaultLimiters(language);
+  }
+
+  return limiters;
+}

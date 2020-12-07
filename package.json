@@ -2,7 +2,7 @@
   "name": "comment-divider",
   "displayName": "Comment Divider",
   "description": "Divide your code by sections with styled separators.",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "publisher": "stackbreak",
   "license": "GPL-3.0",
   "icon": "img/logo_256.png",
@@ -152,6 +152,23 @@
           "maxLength": 1,
           "default": "-",
           "description": "Set symbol for solid line filling."
+        },
+        "comment-divider.languagesMap": {
+          "type": "object",
+          "uniqueItems": true,
+          "patternProperties": {
+            "^[\\w\\-\\.]+$": {
+              "type": "array",
+              "description": "Name of the language mode given by VSCode",
+              "minItems": 1,
+              "maxItems": 2,
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": false,
+          "description": "Defines what characters will be used as comment line limiters for special languages. It also overrides the default preset."
         }
       }
     }
@@ -164,9 +181,10 @@
     "postinstall": "node ./node_modules/vscode/bin/install"
   },
   "devDependencies": {
+    "prettier": "^2.2.1",
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.17.0",
-    "typescript": "^3.2.2",
+    "typescript": "^4.1.2",
     "typescript-tslint-plugin": "^0.3.1",
     "vscode": "^1.1.26"
   }

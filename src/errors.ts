@@ -34,7 +34,10 @@ export const checkEmptyLine = (line: TextLine) => {
 ///
 
 export const checkCommentChars = (text: string, limiters: ILimiters) => {
-  if (text.includes(limiters.left) || text.includes(limiters.right))
+  if (
+    (limiters.left && text.includes(limiters.left)) ||
+    (limiters.right && text.includes(limiters.right))
+  )
     throw new Error('COMMENT_CHARS');
 };
 

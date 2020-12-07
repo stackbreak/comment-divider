@@ -2,7 +2,16 @@ import { workspace } from 'vscode';
 
 import { EXT_ID } from './constants';
 import { getLanguageLimiters } from './limiters';
-import { IPreset, ILimiters, IConfig, PresetId, Height, Align, Transform } from './types';
+import {
+  IPreset,
+  ILimiters,
+  IConfig,
+  PresetId,
+  Height,
+  Align,
+  Transform,
+  ILanguagesMapConfig
+} from './types';
 
 ///
 
@@ -20,6 +29,12 @@ const getPreset = (type: PresetId): IPreset => {
 
 ///
 
+const getLanguagesMapConfig = () =>
+  workspace.getConfiguration(EXT_ID).inspect('languagesMap')
+    .globalValue as ILanguagesMapConfig;
+
+///
+
 const mergePresetWithLimiters = (preset: IPreset, limiters: ILimiters): IConfig => ({
   ...preset,
   limiters
@@ -28,4 +43,7 @@ const mergePresetWithLimiters = (preset: IPreset, limiters: ILimiters): IConfig 
 ///
 
 export const getConfig = (presetId: PresetId, lang: string): IConfig =>
-  mergePresetWithLimiters(getPreset(presetId), getLanguageLimiters(lang));
+  mergePresetWithLimiters(
+    getPreset(presetId),
+    getLanguageLimiters(lang, getLanguagesMapConfig)
+  );
