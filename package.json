@@ -153,7 +153,7 @@
           "default": "-",
           "description": "Set symbol for solid line filling."
         },
-        "comment-divider.languagesAssociations": {
+        "comment-divider.languagesMap": {
           "type": "object",
           "uniqueItems": true,
           "patternProperties": {
@@ -168,7 +168,7 @@
             }
           },
           "additionalProperties": false,
-          "description": "Array of language with their comment character to be used for the banner"
+          "description": "Defines what characters will be used as comment line limiters for special languages. It also overrides the default preset."
         }
       }
     }
@@ -181,9 +181,10 @@
     "postinstall": "node ./node_modules/vscode/bin/install"
   },
   "devDependencies": {
+    "prettier": "^2.2.1",
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.17.0",
-    "typescript": "^3.2.2",
+    "typescript": "^4.1.2",
     "typescript-tslint-plugin": "^0.3.1",
     "vscode": "^1.1.26"
   }

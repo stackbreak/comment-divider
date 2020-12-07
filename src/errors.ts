@@ -34,18 +34,17 @@ export const checkEmptyLine = (line: TextLine) => {
 ///
 
 export const checkCommentChars = (text: string, limiters: ILimiters) => {
-  if (text.includes(limiters.left) || text.includes(limiters.right))
+  if (
+    (limiters.left && text.includes(limiters.left)) ||
+    (limiters.right && text.includes(limiters.right))
+  )
     throw new Error('COMMENT_CHARS');
 };
 
 ///
 
 export const checkLongText = (text: string, lineLen: number, limiters: ILimiters) => {
-  let limiterRightLength: number = 0;
-  if (typeof limiters.right === 'string') {
-    limiterRightLength = limiters.right.length;
-  }
-  const limitersLen = limiters.left.length + limiterRightLength;
+  const limitersLen = limiters.left.length + limiters.right.length;
   const gapsCount = 4;
   const minFillerCount = 2;
   const maxAllowedLen = lineLen - (limitersLen + gapsCount + minFillerCount);

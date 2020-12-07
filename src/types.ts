@@ -40,3 +40,7 @@ export interface IWordsAnchors {
   leftAnchor: number;
   rightAnchor: number;
 }
+
+export interface ILanguagesMapConfig {
+  [key: string]: string[];
+}

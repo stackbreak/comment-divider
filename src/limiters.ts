@@ -1,6 +1,4 @@
-import { ILimiters } from './types';
-import { workspace } from 'vscode';
-import { EXT_ID } from './constants';
+import { ILimiters, ILanguagesMapConfig } from './types';
 
 ///
 
@@ -100,19 +98,19 @@ const getLanguageDefaultLimiters = (lang?: string): ILimiters => {
 };
 
 // waiting for issue: https://github.com/microsoft/vscode/issues/2871
-export function getLanguageLimiters(language: string): ILimiters {
-  const languageConfig = readLanguagesAssociationsConfiguration("languagesAssociations");
-  const languageComment: Object = languageConfig.globalValue;
-  let returnLimiters: ILimiters = getLanguageDefaultLimiters(language);
+export function getLanguageLimiters(
+  language: string,
+  getUserLanguagesMap: () => ILanguagesMapConfig
+): ILimiters {
+  let limiters: ILimiters;
+  const userLanguagesMap = getUserLanguagesMap();
 
-  if (Object.prototype.hasOwnProperty.call(languageComment, language)) {
-    returnLimiters = wrapLimiters(languageComment[language][0], languageComment[language][1]);
+  if (userLanguagesMap !== undefined && userLanguagesMap[language] !== undefined) {
+    const currentLangArr = userLanguagesMap[language];
+    limiters = wrapLimiters(currentLangArr[0], currentLangArr[1] || '');
+  } else {
+    limiters = getLanguageDefaultLimiters(language);
   }
 
-  return returnLimiters;
-}
-
-function readLanguagesAssociationsConfiguration(subConfig: string) {
-  const value = workspace.getConfiguration(EXT_ID).inspect(subConfig);
-  return value;
+  return limiters;
 }
