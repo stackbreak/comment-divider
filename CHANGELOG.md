@@ -2,6 +2,10 @@
 
 All notable changes to the "Comment Divider" extension will be documented in this file.
 
+## [0.3.0] - 2020-12-07
+
+- Added the ability to customize comment characters for any language. PR by [mrvkino](https://github.com/mrvkino/)
+
 ## [0.2.2] - 2020-07-19
 
 ### Enhancement

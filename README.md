@@ -74,6 +74,8 @@ or in html files
 <!-- ---------------------------- html example ----------------------------- -->
 ```
 
+**Also, you can easily [add support](#languages-configuration) for any missing language or override the default preset.**
+
 ## Default Configuration
 
 ### Common
@@ -122,20 +124,28 @@ or in html files
   "comment-divider.lineFiller": "-",
 ```
 
-### New Language Comment
+## Languages Configuration
 
-If a language is not supported by the extension, it is possible to add it in the settings.
+If some language is not supported out of the box, or you want to change default comment characters for an already supported language, it is possible to do it in the settings.
 
 ```json
-"comment-divider.languagesAssociations": {
+"comment-divider.languagesMap": {
       "toml": ["#", "#"],
       "scss": ["//"]
 }
 ```
 
-The item name is the language mode name and is associated with an array of 1 or 2 elements. The first element is the start of the line. The second, if defined, is the end. If the second element is not defined, the filler will be used until the end of the line.
+The item name is the language mode name and is associated with an array of 1 or 2 elements. The first element is the start of the line. The second, if defined, is the end.
 
-It is possible to change the characters used by the extension, for an already supported language, by adding the language in the `comment-divider.languagesAssociations` configuration with the new characters to use.
+The example above defines the right characters for `toml` and overrides `scss` defaults. As a result, the subheaders for these languages look like this:
+
+```toml
+# ------------------------------ toml subheader ------------------------------ #
+```
+
+```scss
+// ----------------------------- scss subheader --------------------------------
+```
 
 ## Issues
 
