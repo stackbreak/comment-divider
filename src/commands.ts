@@ -26,6 +26,7 @@ const getEditorState = (editor: TextEditor) => {
 const generateCommand = (action: Action) => () => {
   try {
     const editor: TextEditor = window.activeTextEditor;
+    
     if (!editor) return;
 
     const { lang, line } = getEditorState(editor);

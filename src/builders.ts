@@ -129,34 +129,42 @@ const composeInjectors = (...injectors) => (charList: CharList) =>
 
 /* ------------------------------ Line Builders ----------------------------- */
 
-export const buildSolidLine = (config: IConfig): string => {
+export const buildSolidLine = (config: IConfig, indent: string = ''): string => {
   const injectLimiters = withLimiters(config.limiters.left, config.limiters.right);
 
   const blankCharList = buildBlankCharList(config.lineLen, config.sym);
   const computedCharList = composeInjectors(injectLimiters)(blankCharList);
 
-  return charListToString(computedCharList);
+  return indent + charListToString(computedCharList);
 };
 
 ///
 
-export const buildWordsLine = (config: IConfig, transformedWords: string): string => {
+export const buildWordsLine = (
+  config: IConfig,
+  transformedWords: string,
+  indent: string = ''
+): string => {
   const injectLimiters = withLimiters(config.limiters.left, config.limiters.right);
   const injectWords = withWords(config.align, transformedWords);
 
   const blankCharList = buildBlankCharList(config.lineLen, config.sym);
   const computedCharList = composeInjectors(injectLimiters, injectWords)(blankCharList);
 
-  return charListToString(computedCharList);
+  return indent + charListToString(computedCharList);
 };
 
 /* ----------------------------- Block Builders ----------------------------- */
 
-export const buildBlock = (config: IConfig, transformedWords: string): string => {
+export const buildBlock = (
+  config: IConfig,
+  transformedWords: string,
+  indent: string = ''
+): string => {
   const textConfig: IConfig = { ...config, sym: GAP_SYM };
-  const topLine = buildSolidLine(config);
-  const textLine = buildWordsLine(textConfig, transformedWords);
-  const bottomLine = buildSolidLine(config);
+  const topLine = buildSolidLine(config, indent);
+  const textLine = buildWordsLine(textConfig, transformedWords, indent);
+  const bottomLine = buildSolidLine(config, indent);
 
   return topLine + NEW_LINE_SYM + textLine + NEW_LINE_SYM + bottomLine;
 };

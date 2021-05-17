@@ -169,6 +169,11 @@
           },
           "additionalProperties": false,
           "description": "Defines what characters will be used as comment line limiters for special languages. It also overrides the default preset."
+        },
+        "comment-divider.fixLength": {
+          "type": "boolean",
+          "default": false,
+          "description": "Set whether the lines will be fixed sized or not. When enabled, a 76-length header will be inserted in a 4-space indented line with an 80-length line configuration to fix the current line length to 80."
         }
       }
     }

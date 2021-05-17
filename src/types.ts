@@ -30,6 +30,7 @@ export interface IPreset {
   height: Height;
   align: Align;
   transform: Transform;
+  fixLen: boolean;
 }
 
 export interface IConfig extends IPreset {

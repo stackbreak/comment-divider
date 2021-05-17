@@ -23,8 +23,9 @@ const getPreset = (type: PresetId): IPreset => {
   const height = section.get<Height>(`${type}Height`);
   const align = section.get<Align>(`${type}Align`);
   const transform = section.get<Transform>(`${type}Transform`);
+  const fixLen = section.get<boolean>('fixLength');
 
-  return { lineLen, sym, height, align, transform };
+  return { lineLen, sym, height, align, transform, fixLen };
 };
 
 ///
