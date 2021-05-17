@@ -25,7 +25,7 @@ const computeMargins = (line: TextLine): IMargins => {
   return margins;
 };
 
-const extractIndent = (rawText: string): string => '1234';
+const extractIndent = (rawText: string): string => rawText.split(/\S+/)[0];
 
 export const wrapWithMargins = (content: string, line: TextLine): string => {
   const margins = computeMargins(line);
@@ -45,19 +45,23 @@ const renderHeader = (croppedText: string, config: IConfig, indent: string): str
 
   const transformedWords = TRANSFORM_MAP[config.transform](croppedText);
   const buildFn = BUILDERS_MAP[config.height];
-  return buildFn(config, transformedWords);
+  return buildFn(config, transformedWords, indent);
 };
 
 const renderLine = (config: IConfig, indent: string): string => {
   checkFillerLen(config.sym);
 
   const buildFn = buildSolidLine;
-  return buildFn(config);
+  return buildFn(config, indent);
 };
 
 export const render = (type: PresetId, rawText: string, lang: string): string => {
   const config = getConfig(type, lang);
-  const indent = config.includeIndent ? extractIndent(rawText) : null;
+  const indent = extractIndent(rawText);
+
+  if (config.includeIndent) {
+    config.lineLen = config.lineLen - indent.length;
+  }
 
   const croppedText = rawText.trim();
 

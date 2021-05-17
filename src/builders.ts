@@ -111,30 +111,38 @@ const composeInjectors = (...injectors) => (charList: CharList) =>
  * Builder functions.
  */
 
-export const buildSolidLine = (config: IConfig): string => {
+export const buildSolidLine = (config: IConfig, leftIndent: string): string => {
   const injectLimiters = withLimiters(config.limiters.left, config.limiters.right);
 
   const blankCharList = buildBlankCharList(config.lineLen, config.sym);
   const computedCharList = composeInjectors(injectLimiters)(blankCharList);
 
-  return charListToString(computedCharList);
+  return leftIndent + charListToString(computedCharList);
 };
 
-export const buildWordsLine = (config: IConfig, transformedWords: string): string => {
+export const buildWordsLine = (
+  config: IConfig,
+  transformedWords: string,
+  leftIndent: string
+): string => {
   const injectLimiters = withLimiters(config.limiters.left, config.limiters.right);
   const injectWords = withWords(config.align, transformedWords);
 
   const blankCharList = buildBlankCharList(config.lineLen, config.sym);
   const computedCharList = composeInjectors(injectLimiters, injectWords)(blankCharList);
 
-  return charListToString(computedCharList);
+  return leftIndent + charListToString(computedCharList);
 };
 
-export const buildBlock = (config: IConfig, transformedWords: string): string => {
+export const buildBlock = (
+  config: IConfig,
+  transformedWords: string,
+  leftIndent: string
+): string => {
   const textConfig: IConfig = { ...config, sym: GAP_SYM };
-  const topLine = buildSolidLine(config);
-  const textLine = buildWordsLine(textConfig, transformedWords);
-  const bottomLine = buildSolidLine(config);
+  const topLine = buildSolidLine(config, leftIndent);
+  const textLine = buildWordsLine(textConfig, transformedWords, leftIndent);
+  const bottomLine = buildSolidLine(config, leftIndent);
 
   return topLine + NEW_LINE_SYM + textLine + NEW_LINE_SYM + bottomLine;
 };
