@@ -9,8 +9,6 @@ import {
 import { checkEmptyLine } from './errors';
 import { Action } from './types';
 
-/* --------------------------------- Inserts -------------------------------- */
-
 export const insertMainHeader: Action = (line, lang) => {
   checkEmptyLine(line);
 
@@ -26,8 +24,6 @@ export const insertMainHeader: Action = (line, lang) => {
     });
 };
 
-///
-
 export const insertSubHeader: Action = (line, lang) => {
   checkEmptyLine(line);
 
@@ -42,8 +38,6 @@ export const insertSubHeader: Action = (line, lang) => {
       commands.executeCommand('cursorEnd');
     });
 };
-
-///
 
 export const insertSolidLine: Action = (line, lang) => {
   const rendered = renderLine(lang);

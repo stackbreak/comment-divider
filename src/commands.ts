@@ -1,19 +1,17 @@
-import { window, Selection, TextDocument, TextEditor, TextLine } from 'vscode';
+import { window, TextEditor } from 'vscode';
 
 import { handleError, checkMultiLineSelection } from './errors';
 import { insertSubHeader, insertMainHeader, insertSolidLine } from './actions';
 import { Action } from './types';
 
-/* --------------------------- Command Generator ---------------------------- */
-
 const getEditorState = (editor: TextEditor) => {
-  const selection: Selection = editor.selection;
+  const selection = editor.selection;
 
   checkMultiLineSelection(selection);
 
-  const document: TextDocument = editor.document;
-  const lang: string = document.languageId;
-  const line: TextLine = document.lineAt(selection.active.line);
+  const document = editor.document;
+  const lang = document.languageId;
+  const line = document.lineAt(selection.active.line);
 
   return {
     line,
@@ -21,11 +19,9 @@ const getEditorState = (editor: TextEditor) => {
   };
 };
 
-///
-
 const generateCommand = (action: Action) => () => {
   try {
-    const editor: TextEditor = window.activeTextEditor;
+    const editor = window.activeTextEditor;
     if (!editor) return;
 
     const { lang, line } = getEditorState(editor);
@@ -34,8 +30,6 @@ const generateCommand = (action: Action) => () => {
     handleError(e);
   }
 };
-
-/* ------------------------------ Commands List ----------------------------- */
 
 export const mainHeaderCommand = generateCommand(insertMainHeader);
 export const subHeaderCommand = generateCommand(insertSubHeader);

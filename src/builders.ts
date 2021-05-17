@@ -1,20 +1,12 @@
 import { GAP_SYM, NEW_LINE_SYM } from './constants';
 import { IWordsAnchors, IConfig, CharList, Align, Height } from './types';
 
-/* --------------------------------- Helpers -------------------------------- */
-
 const buildBlankCharList = (lineLen: number, filler: string): CharList =>
   Array(lineLen).fill(filler);
 
-///
-
 const charListToString = (charList: CharList) => charList.join('');
 
-///
-
 const isEven = (num: number) => num % 2 === 0;
-
-/* --------------------------------- Anchors -------------------------------- */
 
 const getCenterAlignedAnchors = (words: string, charList: CharList): IWordsAnchors => {
   const smartRound =
@@ -26,8 +18,6 @@ const getCenterAlignedAnchors = (words: string, charList: CharList): IWordsAncho
 
   return { leftAnchor, rightAnchor };
 };
-
-///
 
 const getLeftAlignedAnchors = (words: string, charList: CharList): IWordsAnchors => {
   let leftAnchor: number;
@@ -44,8 +34,6 @@ const getLeftAlignedAnchors = (words: string, charList: CharList): IWordsAnchors
 
   return { leftAnchor, rightAnchor };
 };
-
-///
 
 const getRightAlignedAnchors = (words: string, charList: CharList): IWordsAnchors => {
   let leftAnchor: number;
@@ -65,8 +53,6 @@ const getRightAlignedAnchors = (words: string, charList: CharList): IWordsAnchor
   return { leftAnchor, rightAnchor };
 };
 
-///
-
 const getWordsAnchors = (
   align: Align,
   words: string,
@@ -81,8 +67,6 @@ const getWordsAnchors = (
       return getRightAlignedAnchors(words, charList);
   }
 };
-
-/* -------------------------------- Injectors ------------------------------- */
 
 export const withLimiters = (leftLim: string, rightLim: string) => (
   charList: CharList
@@ -105,8 +89,6 @@ export const withLimiters = (leftLim: string, rightLim: string) => (
   });
 };
 
-///
-
 export const withWords = (align: Align, words: string) => (
   charList: CharList
 ): CharList => {
@@ -122,12 +104,8 @@ export const withWords = (align: Align, words: string) => (
   });
 };
 
-///
-
 const composeInjectors = (...injectors) => (charList: CharList) =>
   injectors.reduce((res: CharList, injector) => injector(res), charList);
-
-/* ------------------------------ Line Builders ----------------------------- */
 
 export const buildSolidLine = (config: IConfig): string => {
   const injectLimiters = withLimiters(config.limiters.left, config.limiters.right);
@@ -137,8 +115,6 @@ export const buildSolidLine = (config: IConfig): string => {
 
   return charListToString(computedCharList);
 };
-
-///
 
 export const buildWordsLine = (config: IConfig, transformedWords: string): string => {
   const injectLimiters = withLimiters(config.limiters.left, config.limiters.right);
@@ -150,8 +126,6 @@ export const buildWordsLine = (config: IConfig, transformedWords: string): strin
   return charListToString(computedCharList);
 };
 
-/* ----------------------------- Block Builders ----------------------------- */
-
 export const buildBlock = (config: IConfig, transformedWords: string): string => {
   const textConfig: IConfig = { ...config, sym: GAP_SYM };
   const topLine = buildSolidLine(config);
@@ -160,8 +134,6 @@ export const buildBlock = (config: IConfig, transformedWords: string): string =>
 
   return topLine + NEW_LINE_SYM + textLine + NEW_LINE_SYM + bottomLine;
 };
-
-/* ------------------------------ Builders Map ------------------------------ */
 
 export const BUILDERS_MAP: { [key in Height]: any } = {
   block: buildBlock,

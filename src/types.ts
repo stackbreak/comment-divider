@@ -1,7 +1,5 @@
 import { TextLine } from 'vscode';
 
-///
-
 export type Action = (line: TextLine, lang: string) => void;
 
 export type PresetId = 'subheader' | 'mainHeader' | 'line';
@@ -11,8 +9,6 @@ export type Align = 'left' | 'center' | 'right';
 export type Transform = 'uppercase' | 'lowercase' | 'titlecase' | 'none';
 
 export type CharList = string[];
-
-///
 
 export interface IMargins {
   top: boolean;

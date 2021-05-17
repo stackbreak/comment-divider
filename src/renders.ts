@@ -7,12 +7,8 @@ import { BUILDERS_MAP, buildSolidLine } from './builders';
 import { TRANSFORM_MAP } from './transforms';
 import { PresetId, IMargins } from './types';
 
-/* --------------------------------- Helpers -------------------------------- */
-
 const isEmptyLine = (lineNum: number) =>
   window.activeTextEditor.document.lineAt(lineNum).isEmptyOrWhitespace;
-
-/* --------------------------------- Margins -------------------------------- */
 
 const computeMargins = (line: TextLine): IMargins => {
   const lastLineNum = window.activeTextEditor.document.lineCount - 1;
@@ -29,8 +25,6 @@ const computeMargins = (line: TextLine): IMargins => {
   return margins;
 };
 
-///
-
 export const wrapWithMargins = (content: string, line: TextLine): string => {
   const margins = computeMargins(line);
 
@@ -40,11 +34,7 @@ export const wrapWithMargins = (content: string, line: TextLine): string => {
   return before + content + after;
 };
 
-///
-
 export const wrapWithLinebreaker = (content: string): string => content + NEW_LINE_SYM;
-
-/* --------------------------------- Renders -------------------------------- */
 
 export const renderHeader = (
   type: Exclude<PresetId, 'line'>,
@@ -62,8 +52,6 @@ export const renderHeader = (
   const build = BUILDERS_MAP[config.height];
   return build(config, transformedWords);
 };
-
-///
 
 export const renderLine = (lang: string): string => {
   const config = getConfig('line', lang);

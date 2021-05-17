@@ -1,8 +1,6 @@
 import { Transform } from './types';
 import { GAP_SYM } from './constants';
 
-///
-
 const pass = (words: string) => words;
 
 const toLowerCase = (words: string): string => words.toLowerCase();
@@ -18,8 +16,6 @@ const toTitleCase = (words: string): string =>
         .join('')
     )
     .join(GAP_SYM);
-
-///
 
 export const TRANSFORM_MAP: { [key in Transform]: any } = {
   lowercase: toLowerCase,

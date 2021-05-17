@@ -13,8 +13,6 @@ import {
   ILanguagesMapConfig
 } from './types';
 
-///
-
 const getPreset = (type: PresetId): IPreset => {
   const section = workspace.getConfiguration(EXT_ID);
 
@@ -27,20 +25,14 @@ const getPreset = (type: PresetId): IPreset => {
   return { lineLen, sym, height, align, transform };
 };
 
-///
-
 const getLanguagesMapConfig = () =>
   workspace.getConfiguration(EXT_ID).inspect('languagesMap')
     .globalValue as ILanguagesMapConfig;
-
-///
 
 const mergePresetWithLimiters = (preset: IPreset, limiters: ILimiters): IConfig => ({
   ...preset,
   limiters
 });
-
-///
 
 export const getConfig = (presetId: PresetId, lang: string): IConfig =>
   mergePresetWithLimiters(
