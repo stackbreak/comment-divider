@@ -72,6 +72,11 @@
           "default": 80,
           "description": "Set line length for all dividers."
         },
+        "comment-divider.shouldLengthIncludeIndent": {
+          "type": "boolean",
+          "default": "false",
+          "description": "Set whether the divider will be shrink consider indent size, or will be always fixed length."
+        },
         "comment-divider.mainHeaderFiller": {
           "type": "string",
           "minLength": 1,

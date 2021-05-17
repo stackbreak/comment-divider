@@ -107,6 +107,10 @@ export const withWords = (align: Align, words: string) => (
 const composeInjectors = (...injectors) => (charList: CharList) =>
   injectors.reduce((res: CharList, injector) => injector(res), charList);
 
+/**
+ * Builder functions.
+ */
+
 export const buildSolidLine = (config: IConfig): string => {
   const injectLimiters = withLimiters(config.limiters.left, config.limiters.right);
 
