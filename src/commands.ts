@@ -1,8 +1,8 @@
 import { window, TextEditor } from 'vscode';
 
 import { handleError, checkMultiLineSelection } from './errors';
-import { insertSubHeader, insertMainHeader, insertSolidLine } from './actions';
-import { Action } from './types';
+import { insertDividerAction } from './actions';
+import { PresetId } from './types';
 
 const getEditorState = (editor: TextEditor) => {
   const selection = editor.selection;
@@ -19,18 +19,18 @@ const getEditorState = (editor: TextEditor) => {
   };
 };
 
-const generateCommand = (action: Action) => () => {
+const generateCommand = (type: PresetId) => () => {
   try {
     const editor = window.activeTextEditor;
     if (!editor) return;
 
     const { lang, line } = getEditorState(editor);
-    action(line, lang);
+    insertDividerAction(type, line, lang);
   } catch (e) {
     handleError(e);
   }
 };
 
-export const mainHeaderCommand = generateCommand(insertMainHeader);
-export const subHeaderCommand = generateCommand(insertSubHeader);
-export const solidLineCommand = generateCommand(insertSolidLine);
+export const mainHeaderCommand = generateCommand('mainHeader');
+export const subHeaderCommand = generateCommand('subheader');
+export const solidLineCommand = generateCommand('line');
