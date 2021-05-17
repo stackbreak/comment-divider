@@ -1,7 +1,7 @@
 import { window, Selection, TextLine } from 'vscode';
 
 import { EXT_NAME } from './constants';
-import { ILimiters } from './types';
+import { IConfig, ILimiters } from './types';
 
 export const ERRORS = {
   EMPTY_LINE: 'Line should contain at least one character!',
