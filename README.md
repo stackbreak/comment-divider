@@ -85,6 +85,32 @@ or in html files
   "comment-divider.length": 80,
 ```
 
+```json
+  // Set whether the divider will be shrink consider indent size, or will be always fixed length.
+  "comment-divider.shouldLengthIncludeIndent": false,
+```
+
+- **if `shouldLengthIncludeIndent: false`**
+
+  ```js
+  /* --------------------------------- indent0 -------------------------------- */
+
+      /* --------------------------------- indent1 -------------------------------- */
+
+          /* --------------------------------- indent2 -------------------------------- */
+  ```
+
+- **if `shouldLengthIncludeIndent: true`**
+
+  ```js
+  /* --------------------------------- indent0 -------------------------------- */
+
+      /* ------------------------------- indent1 ------------------------------ */
+
+          /* ----------------------------- indent2 ---------------------------- */
+  ```
+
+
 ### Main Header
 
 ```json

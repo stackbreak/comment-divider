@@ -1,38 +1,15 @@
-import { commands, TextEditorEdit, TextLine, window } from 'vscode';
+import { commands, TextEditorEdit, window } from 'vscode';
 
-import {
-  renderHeader,
-  renderLine,
-  wrapWithMargins,
-  wrapWithLinebreaker
-} from './renders';
+import { render } from './renders';
 import { checkEmptyLine } from './errors';
 import { Action } from './types';
 
-/* --------------------------------- Inserts -------------------------------- */
+export const insertDividerAction: Action = (type, line, lang) => {
+  if (type === 'mainHeader' || type === 'subheader') {
+    checkEmptyLine(line);
+  }
 
-export const insertMainHeader: Action = (line, lang) => {
-  checkEmptyLine(line);
-
-  const rendered = renderHeader('mainHeader', line.text, lang);
-  const content = wrapWithMargins(rendered, line);
-
-  window.activeTextEditor
-    .edit((textEditorEdit: TextEditorEdit) => {
-      textEditorEdit.replace(line.range, content);
-    })
-    .then(() => {
-      commands.executeCommand('cursorEnd');
-    });
-};
-
-///
-
-export const insertSubHeader: Action = (line, lang) => {
-  checkEmptyLine(line);
-
-  const rendered = renderHeader('subheader', line.text, lang);
-  const content = wrapWithMargins(rendered, line);
+  const content = render(type, line.text, lang);
 
   window.activeTextEditor
     .edit((textEditorEdit: TextEditorEdit) => {
@@ -40,20 +17,5 @@ export const insertSubHeader: Action = (line, lang) => {
     })
     .then(() => {
       commands.executeCommand('cursorEnd');
-    });
-};
-
-///
-
-export const insertSolidLine: Action = (line, lang) => {
-  const rendered = renderLine(lang);
-  const content = wrapWithLinebreaker(rendered);
-
-  window.activeTextEditor
-    .edit((textEditorEdit: TextEditorEdit) => {
-      textEditorEdit.insert(line.range.start, content);
-    })
-    .then(() => {
-      commands.executeCommand('cursorHome');
     });
 };

@@ -1,10 +1,6 @@
 import { ILimiters, ILanguagesMapConfig } from './types';
 
-///
-
 const wrapLimiters = (left: string, right: string): ILimiters => ({ left, right });
-
-///
 
 const getLanguageDefaultLimiters = (lang?: string): ILimiters => {
   switch (lang) {

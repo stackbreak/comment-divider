@@ -2,7 +2,7 @@
   "name": "comment-divider",
   "displayName": "Comment Divider",
   "description": "Divide your code by sections with styled separators.",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "publisher": "stackbreak",
   "license": "GPL-3.0",
   "icon": "img/logo_256.png",
@@ -71,6 +71,11 @@
           "type": "number",
           "default": 80,
           "description": "Set line length for all dividers."
+        },
+        "comment-divider.shouldLengthIncludeIndent": {
+          "type": "boolean",
+          "default": false,
+          "description": "Set whether the divider will be shrink consider indent size, or will be always fixed length."
         },
         "comment-divider.mainHeaderFiller": {
           "type": "string",
