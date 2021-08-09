@@ -45,6 +45,7 @@ const getLanguageDefaultLimiters = (lang?: string): ILimiters => {
     case 'yaml':
     case 'yml':
     case 'home-assistant':
+    case 'gdscript':
       return wrapLimiters('#', '#');
 
     case 'html':
